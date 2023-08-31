@@ -1,0 +1,12 @@
+#!/usr/bin/env perl
+
+# PODNAME: oozie-tool
+
+use 5.010;
+use strict;
+use warnings;
+
+use App::Oozie;
+
+my $app = App::Oozie->new_with_options;
+$app->run;
