@@ -109,8 +109,6 @@ option dump_xml_to_json => (
     doc     => 'Specify a directory to convert and dump XML files in the workflow as JSON. This implies a dryrun.',
 );
 
-sub _remove_n { my $s = shift; $s =~ s{\n+}{ }xmsg; $s }
-
 #------------------------------------------------------------------------------#
 
 has required_tt_files => (
