@@ -8,6 +8,7 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 use App::Oozie::Date;
 use App::Oozie::Types::DateTime qw( IsDate IsHour IsMinute );
 use App::Oozie::Types::Common qw( IsJobType );
+use App::Oozie::Util::Misc qw( remove_newline );
 use App::Oozie::Constants qw(
     DEFAULT_END_DATE_DAYS
     DEFAULT_START_DATE_DAY_FRAME
