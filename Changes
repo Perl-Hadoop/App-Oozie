@@ -1,6 +1,8 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+
+0.003     2023-09-04 09:51:18+02:00 Europe/Brussels
 - Remove XML::Simple.
 - Internal cleanup.
 
