@@ -12,7 +12,6 @@ use App::Oozie::Constants qw( OOZIE_STATES_RUNNING );
 
 use Config::Properties;
 use Cwd;
-use Data::Dumper;
 use File::Basename;
 use File::Spec;
 use File::Temp;
@@ -725,7 +724,7 @@ sub check_coordinator_function_calls {
                 $logger->logdie( sprintf $msg, $abs_path );
             }
             my $xs = XML::LibXML::Simple->new;
-            $oozie_conf = $xs->XMLin( \$raw );
+            my $oozie_conf = $xs->XMLin( \$raw );
             $loop_xml_conf_hash->( $oozie_conf, $collector );
             1;
         } or do {
@@ -800,11 +799,13 @@ sub collect_properties {
     ) ) {
         my $val = $properties->getProperty( $name ) || next;
         if ( is_ref $val ) {
+            require Data::Dumper;
+            my $d = Data::Dumper->new([ $val ], [ $name ]);
             $self->logger->logdie(
                 sprintf 'You seem to have a double definition in %s for %s as %s',
                             'job.properties',
                             $name,
-                            do { my $d = Data::Dumper->new([ $val ], [ $name ]); $d->Dump },
+                            $d->Dump,
             );
         }
         $rv{ $name } = $val;

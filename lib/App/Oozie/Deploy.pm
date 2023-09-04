@@ -20,8 +20,6 @@ Deploys workflows to HDFS. Specifying names as final arguments will upload only 
 USAGE
 ;
 
-use Data::Dumper;
-
 use App::Oozie::Deploy::Template;
 use App::Oozie::Deploy::Validate::Spec;
 use App::Oozie::Types::Common qw( IsDir IsFile );

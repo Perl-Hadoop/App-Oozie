@@ -125,11 +125,12 @@ sub get_job_conf {
     for my $key ( keys %c ) {
         my $val = $c{ $key };
         if ( is_ref $val ) {
+            my $d = Data::Dumper->new([ $val ], [ $key ]);
             $self->logger->logdie(
                 sprintf 'You seem to have a double definition in %s for %s as %s',
                             $file,
                             $key,
-                            do { my $d = Data::Dumper->new([ $val ], [ $key ]); $d->Dump },
+                            $d->Dump,
             );
         }
         $val =~ s{ [^\\][#] .* \z }{}xms;
