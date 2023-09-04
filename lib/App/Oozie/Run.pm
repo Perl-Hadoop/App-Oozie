@@ -46,12 +46,10 @@ with qw(
 
 #------------------------------------------------------------------------------#
 
-sub _remove_n { my $s = shift; $s =~ s{\n+}{ }xmsg; $s }
-
 option appname => (
     is     => 'rw',
     format => 's',
-    doc    => _remove_n( <<'DOC' ),
+    doc    => remove_newline( <<'DOC' ),
 Workflow name, useful if you want to run different instances of the same
 workflow with different parameters. If not set, then this will default to
 the workflow basename.
@@ -70,7 +68,7 @@ option type => (
     is      => 'rw',
     isa     => IsJobType,
     format  => 's',
-    doc     =>  _remove_n( sprintf <<'DOC', $__JOB_TYPES ),
+    doc     =>  remove_newline( sprintf <<'DOC', $__JOB_TYPES ),
 Defines the type of job the user needs to launch. If nothing is specified,
 the script will check the existence of a coordinator.xml file, to determine
 whether this should be launched as a coordinator or a single workflow.%s
@@ -86,7 +84,7 @@ option define => (
     is      => 'rw',
     format  => 's@',
     default => sub { [] },
-    doc     => q{define extra parameters for oozie, like "--define 'foo=bar'"},
+    doc     => q{Define extra parameters for oozie, like "--define 'foo=bar'"},
 );
 
 option path => (
@@ -101,7 +99,7 @@ option sla_duration => (
     is      => 'rw',
     isa     => Int,
     format  => 'i',
-    doc     =>  _remove_n( <<'DOC' ),
+    doc     =>  remove_newline( <<'DOC' ),
 the runtime, in minutes, after which a workflow deployed using the --sla
 switch should send an sla-duration-miss email to the errorEmailTo
 recipient(s). This may be adjusted dynamically and automatically after
@@ -115,7 +113,7 @@ option starthour => (
     format  => 's',
     default => sub { 0 },
     isa     => IsHour,
-    doc     =>  _remove_n( <<'DOC' ),
+    doc     =>  remove_newline( <<'DOC' ),
 hour of day (0 to 23) for the 1st coordinator run. Applies to all
 coordinators, even hourly ones. Defaults to midnight (in UTC)
 DOC
@@ -126,7 +124,7 @@ option startmin => (
     format  => 's',
     default => sub { 0 },
     isa     => IsMinute,
-    doc     =>  _remove_n( <<'DOC' ),
+    doc     =>  remove_newline( <<'DOC' ),
 minute within starthour 00 to 59 for the coordinator run. Applies to all
 coordinators. Defaults to 00
 DOC
@@ -137,7 +135,7 @@ option endhour => (
     format  => 's',
     default => sub { 0 },
     isa     => IsHour,
-    doc     =>  _remove_n( <<'DOC' ),
+    doc     =>  remove_newline( <<'DOC' ),
 hour of day (0 to 23) for the last coordinator run. Applies to all
 coordinators, even hourly ones. Defaults to midnight (in UTC)
 DOC
@@ -148,7 +146,7 @@ option endmin => (
     format  => 's',
     default => sub { 0 },
     isa     => IsMinute,
-    doc     =>  _remove_n( <<'DOC' ),
+    doc     =>  remove_newline( <<'DOC' ),
 minute within endhour 00 to 59 for the coordinator run. Applies to all
 coordinators. Defaults to 00
 DOC
@@ -162,7 +160,7 @@ option startdate => (
     is     => 'rw',
     isa    => IsDate,
     format => 's',
-    doc    =>  _remove_n( sprintf <<'DOC', DEFAULT_START_DATE_DAY_FRAME, join( q{, }, SHORTCUT_METHODS ) ),
+    doc    =>  remove_newline( sprintf <<'DOC', DEFAULT_START_DATE_DAY_FRAME, join( q{, }, SHORTCUT_METHODS ) ),
 date at which the first instance of the coordinator should be run. Maximum
 %s days in the past or future, can be overriden with --force, defaults to
 tomorrow. Option can also be: %s
@@ -173,7 +171,7 @@ option enddate => (
     is     => 'rw',
     isa    => IsDate,
     format => 's',
-    doc    =>  _remove_n( sprintf <<'DOC', ( DEFAULT_END_DATE_DAYS ) x 2 ),
+    doc    =>  remove_newline( sprintf <<'DOC', ( DEFAULT_END_DATE_DAYS ) x 2 ),
 The last date the workflow should run. Maximum %s days from today. Defaults
 to %s days from today.
 DOC

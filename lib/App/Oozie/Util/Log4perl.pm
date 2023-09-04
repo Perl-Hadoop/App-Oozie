@@ -40,7 +40,7 @@ App::Oozie::Util::Log4perl - Helper for handling the Log4perl template.
 
 =head1 DESCRIPTION
 
-Internal modile.
+Internal module.
 
 =head1 Methods
 
