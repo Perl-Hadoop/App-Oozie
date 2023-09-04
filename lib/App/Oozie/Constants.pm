@@ -105,7 +105,8 @@ App::Oozie::Constants - Internal constants.
 
 =head1 SYNOPSIS
 
-    use App::Oozie::Constants qw( DEFAULT_TZ );
+    use App::Oozie::Constants qw( DEFAULT_CLUSTER_NAME );
+    printf 'Default cluster name is %s', DEFAULT_CLUSTER_NAME;
 
 =head1 DESCRIPTION
 
