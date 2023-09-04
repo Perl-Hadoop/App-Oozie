@@ -6,13 +6,13 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw(
+    DEFAULT_TIMEOUT
+);
+
 use Moo::Role;
 use MooX::Options;
 use Types::Standard qw( Int );
-
-use constant {
-    DEFAULT_TIMEOUT => 60 * 3,
-};
 
 option dryrun => (
     is       => 'rw',
@@ -96,10 +96,6 @@ defines various fields.
 =head2 Overridable from sub-classes
 
 =head3 effective_username
-
-=head1 Constants
-
-=head2 DEFAULT_TIMEOUT
 
 =head1 SEE ALSO
 

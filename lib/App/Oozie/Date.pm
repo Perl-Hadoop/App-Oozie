@@ -5,22 +5,16 @@ use strict;
 use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw(
+    DATE_PATTERN
+    SHORTCUT_METHODS
+);
 use Carp qw( croak );
 use DateTime;
 use DateTime::Format::Strptime;
 use DateTime::Format::Duration;
 use Moo;
 use Types::Standard qw( Str );
-
-use constant DATE_PATTERN => '%Y-%m-%d';
-# Alternatively, we can think about using sub attributes to gather this
-# dynamically instead of being a hardcoded constant, but that can also be
-# a bit over engineering.
-use constant SHORTCUT_METHODS => qw(
-    today
-    tomorrow
-    yesterday
-);
 
 has strp => (
     is      => 'ro',
@@ -216,12 +210,6 @@ Date related functions.
 =head3 strp_silent
 
 =head3 timezone
-
-=head1 Constants
-
-=head2 DATE_PATTERN
-
-=head2 SHORTCUT_METHODS
 
 =head1 SEE ALSO
 

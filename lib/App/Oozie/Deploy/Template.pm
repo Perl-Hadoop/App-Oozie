@@ -6,6 +6,7 @@ use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Types::Common qw( IsDir );
+use App::Oozie::Constants qw( TEMPLATE_DEFINE_VAR );
 
 use Config::Properties;
 use Data::Dumper ();
@@ -36,10 +37,6 @@ use Types::Standard qw(
     Str
 );
 use XML::LibXML ();
-
-use constant {
-    DEFINE_VAR_TMPL => q{%s='%s'},
-};
 
 with qw(
     App::Oozie::Role::Log
@@ -201,7 +198,7 @@ sub compile {
             next;
         }
         push @command,
-            '--define' => sprintf( DEFINE_VAR_TMPL, $prop, $config->{$prop} );
+            '--define' => sprintf( TEMPLATE_DEFINE_VAR, $prop, $config->{$prop} );
     }
     my($validation_errors, $total_errors);
     my $job_properties_file = File::Spec->catfile( $workflow, 'job.properties' );
@@ -210,7 +207,7 @@ sub compile {
         my %job_conf = $self->get_job_conf( $job_properties_file );
         foreach my $name ( keys %job_conf ) {
             push @command,
-                '--define' => sprintf( DEFINE_VAR_TMPL, $name, $job_conf{ $name } );
+                '--define' => sprintf( TEMPLATE_DEFINE_VAR, $name, $job_conf{ $name } );
         }
 
     }
@@ -226,7 +223,7 @@ sub compile {
         for my $tuple ( @rs ) {
             my( $key, $value) = @{ $tuple };
             push @command,
-                '--define' => sprintf( DEFINE_VAR_TMPL, $key, $value );
+                '--define' => sprintf( TEMPLATE_DEFINE_VAR, $key, $value );
         }
     }
 
@@ -530,10 +527,6 @@ TBD
 =head2 oozie_workflows_base
 
 =head2 possible_readme_file_names
-
-=head1 Constants
-
-=head2 DEFINE_VAR_TMPL
 
 =head1 SEE ALSO
 

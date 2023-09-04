@@ -8,7 +8,14 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 use App::Oozie::Date;
 use App::Oozie::Types::DateTime qw( IsDate IsHour IsMinute );
 use App::Oozie::Types::Common qw( IsJobType );
-use App::Oozie::Constants qw( OOZIE_STATES_RUNNING );
+use App::Oozie::Constants qw(
+    DEFAULT_END_DATE_DAYS
+    DEFAULT_START_DATE_DAY_FRAME
+    EMPTY_STRING
+    OOZIE_STATES_RUNNING
+    SHORTCUT_METHODS
+    SPACE_CHAR
+);
 
 use Config::Properties;
 use Cwd;
@@ -29,13 +36,6 @@ use MooX::Options prefer_commandline => 0,
 Usage: %c %o [options] workflow-name
 USAGE
 ;
-
-use constant {
-    DEFAULT_END_DATE_DAYS        => 180,
-    DEFAULT_START_DATE_DAY_FRAME => 7,
-    EMPTY_STRING                 => q{},
-    SPACE_CHAR                   => q{ },
-};
 
 with qw(
     App::Oozie::Role::Log
@@ -162,7 +162,7 @@ option startdate => (
     is     => 'rw',
     isa    => IsDate,
     format => 's',
-    doc    =>  _remove_n( sprintf <<'DOC', DEFAULT_START_DATE_DAY_FRAME, join( q{, }, App::Oozie::Date->SHORTCUT_METHODS ) ),
+    doc    =>  _remove_n( sprintf <<'DOC', DEFAULT_START_DATE_DAY_FRAME, join( q{, }, SHORTCUT_METHODS ) ),
 date at which the first instance of the coordinator should be run. Maximum
 %s days in the past or future, can be overriden with --force, defaults to
 tomorrow. Option can also be: %s
@@ -199,7 +199,7 @@ sub setup_dates {
     # the time it is submitted
     my $startdate = $self->startdate;
     if ( $startdate ) {
-        my %is_shortcut = map { $_ => 1 } $date->SHORTCUT_METHODS;
+        my %is_shortcut = map { $_ => 1 } SHORTCUT_METHODS;
         if ( $is_shortcut{ $startdate } ) {
             $startdate = $date->$startdate();
         }
@@ -1037,16 +1037,6 @@ For this to work, the coordinator.xml and workflow.xml must make
 =head3 basedir
 
 =head3 errors
-
-=head1 Constants
-
-=head2 DEFAULT_END_DATE_DAYS
-
-=head2 DEFAULT_START_DATE_DAY_FRAME
-
-=head2 EMPTY_STRING
-
-=head2 SPACE_CHAR
 
 =head1 SEE ALSO
 

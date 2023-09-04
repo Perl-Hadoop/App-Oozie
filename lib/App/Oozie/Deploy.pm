@@ -5,10 +5,10 @@ use strict;
 use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
-use constant {
-    FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES => 2,
-};
-
+use App::Oozie::Constants qw(
+    FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
+    WEBHDFS_CREATE_CHUNK_SIZE
+);
 use Cwd 'abs_path';
 use Moo;
 use MooX::Options prefer_commandline => 0,
@@ -54,8 +54,6 @@ use Types::Standard qw(
     StrictNum
     Str
 );
-
-use constant WEBHDFS_CREATE_CHUNK_SIZE => 1024**1024 * 2;
 
 with qw(
     App::Oozie::Role::Log
@@ -1206,12 +1204,6 @@ This is an action/program in the Oozie Tooling.
 =head3 ttlib_base_dir
 
 =head3 ttlib_dynamic_base_dir_name
-
-=head1 Constants
-
-=head2 FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
-
-=head2 WEBHDFS_CREATE_CHUNK_SIZE
 
 =head1 SEE ALSO
 

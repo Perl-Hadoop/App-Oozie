@@ -18,16 +18,78 @@ use constant OOZIE_STATES_RUNNING => qw(
     PREP
 );
 
+use constant HDFS_COMPARE_SKIP_FILES => qw(
+    .deployment
+);
+
+use constant SHORTCUT_METHODS => qw(
+    today
+    tomorrow
+    yesterday
+);
+
 use constant {
-    DEFAULT_TZ           => 'CET',
-    DEFAULT_WEBHDFS_PORT => 14000,
+    DATE_PATTERN                            => '%Y-%m-%d',
+    DEFAULT_CLUSTER_NAME                    => 'MyCluster',
+    DEFAULT_END_DATE_DAYS                   => 180,
+    DEFAULT_HDFS_WF_PATH                    => '/oozie_wfs',
+    DEFAULT_META_FILENAME                   => 'meta.yml',
+    DEFAULT_NAMENODE_RPC_PORT               => 8020,
+    DEFAULT_START_DATE_DAY_FRAME            => 7,
+    DEFAULT_TIMEOUT                         => 60 * 3,
+    DEFAULT_TZ                              => 'CET',
+    DEFAULT_WEBHDFS_PORT                    => 14000,
+    EMPTY_STRING                            => q{},
+    FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES => 2,
+    RE_LINEAGE_DATA_ITEM                    => qr{
+        \A
+            hive     # Data source type
+            [/]      # Separator
+            [\w^.]+  # Database name
+            [.]      # Separator
+            [\w^.]+  # Table name
+        \z
+    }xms,
+    RE_OOZIE_ID => qr{
+        [0-9]+     -
+        [0-9]+     -
+        oozie-oozi -
+    }xms,
+    SPACE_CHAR      => q{ },
+    VALID_JOB_TYPES => [qw(
+        bundle
+        coord
+        wf
+    )],
+    TEMPLATE_DEFINE_VAR       => q{%s='%s'},
+    WEBHDFS_CREATE_CHUNK_SIZE => 1024**1024 * 2,
+
 };
 
 our @EXPORT_OK = qw(
+    DATE_PATTERN
+    DEFAULT_CLUSTER_NAME
+    DEFAULT_END_DATE_DAYS
+    DEFAULT_HDFS_WF_PATH
+    DEFAULT_META_FILENAME
+    DEFAULT_NAMENODE_RPC_PORT
+    DEFAULT_START_DATE_DAY_FRAME
+    DEFAULT_TIMEOUT
     DEFAULT_TZ
     DEFAULT_WEBHDFS_PORT
+    EMPTY_STRING
+    FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
+    HDFS_COMPARE_SKIP_FILES
     OOZIE_STATES_RERUNNABLE
     OOZIE_STATES_RUNNING
+    RE_LINEAGE_DATA_ITEM
+    RE_OOZIE_ID
+    RE_OOZIE_ID
+    SHORTCUT_METHODS
+    SPACE_CHAR
+    TEMPLATE_DEFINE_VAR
+    VALID_JOB_TYPES
+    WEBHDFS_CREATE_CHUNK_SIZE
 );
 
 1;

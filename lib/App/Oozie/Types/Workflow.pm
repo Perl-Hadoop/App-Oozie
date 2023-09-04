@@ -4,6 +4,7 @@ use 5.010;
 use strict;
 use warnings;
 
+use App::Oozie::Constants qw( RE_LINEAGE_DATA_ITEM );
 use Email::Valid;
 use Sub::Quote qw( quote_sub );
 use Type::Library -base;
@@ -13,18 +14,6 @@ use Type::Utils -all;
 BEGIN {
     extends 'Types::Standard';
 }
-
-use constant {
-    RE_LINEAGE_DATA_ITEM => qr{
-        \A
-            hive     # Data source type
-            [/]      # Separator
-            [\w^.]+  # Database name
-            [.]      # Separator
-            [\w^.]+  # Table name
-        \z
-    }xms,
-};
 
 my $Email = declare Email => as Str,
     constraint => quote_sub q{

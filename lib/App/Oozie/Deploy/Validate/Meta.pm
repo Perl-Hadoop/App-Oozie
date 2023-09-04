@@ -10,6 +10,7 @@ use App::Oozie::Types::Workflow qw(
     WorkflowMeta
     WorkflowMetaOrDummy
 );
+use App::Oozie::Constants qw( DEFAULT_META_FILENAME );
 use Moo;
 use MooX::Options;
 use Types::Standard qw( InstanceOf Str );
@@ -22,7 +23,7 @@ with qw(
 has file => (
     is      => 'rwp',
     isa     => Str,
-    default => sub { 'meta.yml' },
+    default => sub { DEFAULT_META_FILENAME },
 );
 
 has coord_directive => (
