@@ -21,7 +21,7 @@ use IPC::Cmd        ();
 use Ref::Util       qw( is_ref is_hashref is_arrayref );
 use Template;
 use Types::Standard qw( Int );
-use XML::Simple     qw( XMLin );
+use XML::LibXML::Simple;
 
 use Moo;
 use MooX::Options prefer_commandline => 0,
@@ -724,7 +724,8 @@ sub check_coordinator_function_calls {
                         ;
                 $logger->logdie( sprintf $msg, $abs_path );
             }
-            my $oozie_conf =  XMLin( \$raw );
+            my $xs = XML::LibXML::Simple->new;
+            $oozie_conf = $xs->XMLin( \$raw );
             $loop_xml_conf_hash->( $oozie_conf, $collector );
             1;
         } or do {

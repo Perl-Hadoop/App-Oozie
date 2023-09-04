@@ -114,7 +114,7 @@ sub _init_data {
             # parsed document.
             #
             # The alternative might be to feed the document to a function which
-            # does not do schema validation (like XML::SImple) -- which will lead
+            # does not do schema validation (like XML::Simple) -- which will lead
             # to double parsing -- or just try to parse the error message like
             # down below.
             #
