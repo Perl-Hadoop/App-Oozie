@@ -1,6 +1,8 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+
+0.005     2023-09-06 20:03:36+02:00 Europe/Brussels
 - Depends on a newer Net::Hadoop::WebHDFS::LWP for create() operations.
 - Handle the upload gracefully and properly.
 - More logging.
