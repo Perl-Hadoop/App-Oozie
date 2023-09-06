@@ -1055,19 +1055,89 @@ sub upload_to_hdfs {
     return $success;
 }
 
-sub _copy_to_hdfs_with_webhdfs {
+
+sub _hdfs_exists_no_exception {
     my $self = shift;
-    my $sourceFolder = shift;
-    my $destFolder = shift;
+    my $path = shift;
     my $hdfs = $self->hdfs;
-    my $logger  = $self->logger;
-    my $verbose = $self->verbose;
+    my $rv;
 
-    $logger->info("copying from $sourceFolder, to $destFolder \n");
+    eval {
+        $rv = $hdfs->exists( $path );
+        1;
+    } or do {
+        my $eval_error = $@ || 'Zombie error';
+        if ( $self->verbose ) {
+            $self->logger->debug(
+                sprintf "WebHDFS exists() failed with exception, however since this is a silent call, it is ignored: %s",
+                            $eval_error,
+            )
+        }
+    };
 
-    if (!$hdfs->exists($destFolder)) {
-        $hdfs->mkdir($destFolder);
-        $hdfs->chmod($destFolder, 775);
+    return $rv;
+}
+
+sub _copy_to_hdfs_with_webhdfs {
+    my $self         = shift;
+    my $sourceFolder = shift;
+    my $destFolder   = shift;
+
+    my $hdfs         = $self->hdfs;
+    my $logger       = $self->logger;
+    my $verbose      = $self->verbose;
+
+    $logger->info(
+        sprintf "copying from `%s` to `%s`",
+                    $sourceFolder,
+                    $destFolder,
+    );
+
+    if ( ! $self->_hdfs_exists_no_exception( $destFolder ) ) {
+        if ( $verbose ) {
+            $logger->debug(
+                sprintf 'HDFS destination %s does not exist',
+                            $destFolder,
+            );
+        }
+        my(undef, @paths) = File::Spec->splitpath( $destFolder );
+        my $remote_base;
+        for my $chunk ( @paths ) {
+            if ( $remote_base ) {
+                $remote_base = File::Spec->catdir( $remote_base, $chunk);
+            }
+            else {
+                $remote_base = $chunk;
+            }
+            if ( $self->_hdfs_exists_no_exception( $remote_base ) ) {
+                next;
+            }
+            if ( $verbose ) {
+                $logger->debug(
+                    sprintf 'Attempting to mkdir HDFS destination %s',
+                                $remote_base,
+                );
+            }
+            $hdfs->mkdir( $remote_base );
+            $hdfs->chmod( $remote_base, 775 );
+        }
+        # since the above calls were silent, see if this throws anything
+        if ( $hdfs->exists($destFolder) ) {
+            if ( $verbose ) {
+                $logger->debug(
+                    sprintf "HDFS destination %s exists",
+                                $destFolder,
+                );
+            }
+        }
+    }
+    else {
+        if ( $verbose ) {
+            $logger->debug(
+                sprintf 'HDFS destination %s exists',
+                            $destFolder,
+            );
+        }
     }
     my $f_rule = File::Find::Rule->new->file->maxdepth(1)->mindepth(1);
 
@@ -1082,7 +1152,13 @@ sub _copy_to_hdfs_with_webhdfs {
         if($verbose){
             $logger->debug("Creating $dest");
         }
-        $hdfs->create($dest, $data, overwrite => "true");
+        $hdfs->touchz( $dest );
+        if ( ! $hdfs->create($dest, $data, overwrite => "true") ) {
+            $logger->logdie(
+                sprintf 'Failed to create %s through WebHDFS',
+                        $dest
+            );
+        }
         $hdfs->chmod($dest, 775);
     }
 

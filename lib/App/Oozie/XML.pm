@@ -360,6 +360,10 @@ sub _build_schema {
 
         # get the namespace and version
         my %attr      = map +( $_->name, $_->value ), $XML_SCHEMA->attributes;
+        if ( ! exists $attr{targetNamespace} ) {
+            # seems to be a change in new version
+            next;
+        }
         my $namespace = delete $attr{targetNamespace};
         my $version   = ( split /:/, $namespace )[-1];                       # assuming uri:oozie:...:$version
         my $prefix = ( split /:/, ( grep $attr{$_} eq $namespace, keys %attr )[0] )[-1];
