@@ -8,6 +8,7 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 use App::Oozie::Types::Common qw( IsExecutable IsFile IsDir );
 use Moo::Role;
 use MooX::Options;
+use Types::Standard qw( Str );
 
 option oozie_cli => (
     is       => 'rw',
@@ -30,6 +31,15 @@ option local_oozie_code_path => (
     isa      => IsDir,
     format   => 's',
     doc      => 'Full path to the local base location of the workflows',
+    required => 1,
+);
+
+option template_namenode => (
+    is       => 'rw',
+    isa      => Str,
+    format   => 's',
+    doc      => 'The value of the nameNode variable set in Oozie job config',
+    default  => sub { 'hdfs://nameservice1' },
     required => 1,
 );
 

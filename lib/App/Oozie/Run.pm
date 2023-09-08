@@ -500,7 +500,7 @@ sub collect_oozie_cmd_args {
                                         startmin
                                     );
 
-    my $nameNode = $prop{nameNode} || 'hdfs://nameservice1';
+    my $nameNode = $prop{nameNode} || $self->template_namenode;
 
     my %cmd_param = (
         app_name      => $self->appname,
