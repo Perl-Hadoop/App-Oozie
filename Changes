@@ -1,6 +1,8 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+
+0.006     2023-09-08 12:47:12+02:00 Europe/Brussels
 - New option template_namenode to giving the ability
   to override the Oozie variable nameNode from cli.
 
