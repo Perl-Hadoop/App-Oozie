@@ -182,7 +182,6 @@ sub compile {
     # Possible improvement: use libraries instead of this command
     #     if feasible
     my @command = (
-        'ttree',
         '-f'     => $tt_conf_file,
         '-a',
         '--src'  => $workflow,
@@ -227,11 +226,7 @@ sub compile {
         }
     }
 
-    my( $ok, $err, $full_buf, $stdout_buff, $stderr_buff ) = IPC::Cmd::run(
-        command => \@command,
-        verbose => $self->verbose,
-        timeout => $self->timeout,
-    );
+    my($ok, $err, $full_buf, $stdout_buff, $stderr_buff) = $self->_ttree_cli( @command );
 
     # ttree doesn't return an error status when it encounters an error, so just
     # look at the output
@@ -281,6 +276,55 @@ sub compile {
             $total_errors      // 0,
             $dest,
     ;
+}
+
+sub _ttree_obj {
+    my $self = shift;
+    my @command = @_;
+    require App::Oozie::Deploy::Template::ttree;
+
+    my( $ok, $err, $full_buf, $stdout_buff, $stderr_buff );
+
+    $stdout_buff = [];
+    $stderr_buff = [];
+
+    my $logger = sub {
+        my %log = @_;
+        if ( $log{level} eq 'info' ) {
+            push @{ $stdout_buff }, $log{msg};
+        }
+        else {
+            push @{ $stderr_buff }, $log{msg};
+        }
+    };
+
+    eval {
+        my $ttree = App::Oozie::Deploy::Template::ttree->new( $logger );
+        $ttree->run( @command );
+        $ok = 1;
+        1;
+    } or do {
+        my $eval_error = $@ || 'Zombie error';
+        push @{ $stderr_buff }, $eval_error;
+    };
+
+    $full_buf = [ @{ $stdout_buff }, @{ $stderr_buff } ];
+
+    return ( $ok, $err, $full_buf, $stdout_buff, $stderr_buff );
+}
+
+sub _ttree_cli {
+    my $self = shift;
+    my @command = @_;
+
+    unshift @command, 'ttree';
+
+    my( $ok, $err, $full_buf, $stdout_buff, $stderr_buff ) = IPC::Cmd::run(
+        command => \@command,
+        verbose => $self->verbose,
+        timeout => $self->timeout,
+    );
+    return $ok, $err, $full_buf, $stdout_buff, $stderr_buff;
 }
 
 sub _probe_readme {
