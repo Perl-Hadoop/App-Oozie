@@ -28,6 +28,7 @@ use App::Oozie::Constants qw( OOZIE_STATES_RUNNING );
 
 use Carp ();
 use Config::Properties;
+use Config::General ();
 use DateTime::Format::Strptime;
 use DateTime;
 use Email::Valid;
@@ -109,6 +110,15 @@ option dump_xml_to_json => (
     format  => 's',
     doc     => 'Specify a directory to convert and dump XML files in the workflow as JSON. This implies a dryrun.',
 );
+
+option hdfs_properties_file => (
+    is      => 'rw',
+    isa     => Str,
+    format  => 's',
+    # i.e.: /share/oozie.properties
+    doc     => 'The location of the optional properties file on HDFS',
+);
+
 
 #------------------------------------------------------------------------------#
 
@@ -384,6 +394,24 @@ sub destination_path {
             ;
 }
 
+sub __collect_internal_conf_hdfs {
+    my $self   = shift;
+    my $logger = $self->logger;
+    my $file   = $self->hdfs_properties_file;
+
+    return {} if ! $file; # not specified at all
+
+    $logger->debug( sprintf "If exists, fetching from HDFS: %s", $file );
+
+    return {} if ! $self->_hdfs_exists_no_exception( $file );
+
+    return {
+        Config::General::ParseConfig(
+            -String => $self->hdfs->read( $file ),
+        )
+    };
+}
+
 sub __collect_internal_conf {
     my $self  = shift;
     my $keep  = $self->keep_deploy_path;
@@ -410,6 +438,11 @@ sub __collect_internal_conf {
             };
         }
     }
+
+    $config = {
+        %{ $config },
+        %{ $self->__collect_internal_conf_hdfs },
+    };
 
     my $base_dest = File::Temp::tempdir(
                         CLEANUP => ! $keep,
