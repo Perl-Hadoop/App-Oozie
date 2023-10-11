@@ -1,6 +1,8 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+
+0.008     2023-10-11 19:20:58+02:00 Europe/Brussels
 - Wokaround "/tmp is an existing symbolic link" error.
 
 0.007     2023-09-26 12:32:17+02:00 Europe/Brussels
