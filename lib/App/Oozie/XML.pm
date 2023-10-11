@@ -6,9 +6,11 @@ use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Types::Common qw( IsFile );
+use App::Oozie::Util::Misc qw( resolve_tmp_dir );
+
 use Archive::Zip;
 use Clone qw( clone );
-use File::Temp;
+use File::Temp ();
 use Text::Trim qw( trim );
 use Moo;
 use MooX::Options;
@@ -289,7 +291,10 @@ sub _build_schema {
     my %prefixes;    # final prefix -> namespaces mapping
 
     my $oozie_client_jar = $self->oozie_client_jar;
-    my $tempdir          = File::Temp::tempdir(CLEANUP => 1);
+    my $tempdir          = File::Temp::tempdir(
+                                CLEANUP => 1,
+                                DIR     => resolve_tmp_dir(),
+                            );
     my $zip              = $self->zip;
 
     state $zip_error_code_to_str = {

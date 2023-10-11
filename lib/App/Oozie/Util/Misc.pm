@@ -7,9 +7,20 @@ use parent qw( Exporter );
 
 our @EXPORT_OK = qw(
     remove_newline
+    resolve_tmp_dir
 );
 
 sub remove_newline { my $s = shift; $s =~ s{\n+}{ }xmsg; $s }
+
+sub resolve_tmp_dir {
+    # Wokaround "/tmp is an existing symbolic link" error.
+    # Happens in EMR for example.
+    #
+    my $tmp = $ENV{TMPDIR} || $ENV{TMP} || '/tmp';
+    return $tmp if ! -l $tmp;
+    my $real = readlink $tmp;
+    return $real;
+}
 
 1;
 

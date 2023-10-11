@@ -23,6 +23,7 @@ USAGE
 use App::Oozie::Deploy::Template;
 use App::Oozie::Deploy::Validate::Spec;
 use App::Oozie::Types::Common qw( IsDir IsFile );
+use App::Oozie::Util::Misc qw( resolve_tmp_dir );
 use App::Oozie::Constants qw( OOZIE_STATES_RUNNING );
 
 use Carp ();
@@ -35,7 +36,7 @@ use File::Basename  qw( basename dirname );
 use File::Find ();
 use File::Find::Rule;
 use File::Spec;
-use File::Temp      qw( tempdir );
+use File::Temp ();
 use List::MoreUtils qw( uniq );
 use List::Util      qw( max  );
 use Path::Tiny      qw( path );
@@ -410,7 +411,10 @@ sub __collect_internal_conf {
         }
     }
 
-    my $base_dest = tempdir( CLEANUP => ! $keep );
+    my $base_dest = File::Temp::tempdir(
+                        CLEANUP => ! $keep,
+                        DIR     => resolve_tmp_dir(),
+                    );
 
     $config->{base_dest} = $base_dest;
 
