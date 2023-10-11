@@ -46,6 +46,8 @@ Internal module.
 
 =head2 remove_newline
 
+=head2 resolve_tmp_dir
+
 =head1 SEE ALSO
 
 L<App::Oozie>.
