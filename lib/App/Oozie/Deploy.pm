@@ -198,6 +198,14 @@ has configuration_files => (
     is      => 'rw',
     # TODO: type needs fixing for coercion
     # isa     => ArrayRef[IsFile],
+    lazy    => 1,
+    default => sub {
+        my $self  = shift;
+        my $ttlib = $self->ttlib_base_dir;
+        [
+            File::Spec->catfile( $ttlib, 'common.properties' ),
+        ],
+    },
 );
 
 has email_validator => (
