@@ -10,7 +10,11 @@ our @EXPORT_OK = qw(
     resolve_tmp_dir
 );
 
-sub remove_newline { my $s = shift; $s =~ s{\n+}{ }xmsg; $s }
+sub remove_newline {
+    my $s = shift;
+    $s =~ s{\n+}{ }xmsg;
+    return $s;
+}
 
 sub resolve_tmp_dir {
     # Wokaround "/tmp is an existing symbolic link" error.
