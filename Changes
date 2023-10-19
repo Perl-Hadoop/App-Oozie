@@ -1,6 +1,7 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+- perl 5.14.0 is now required for the "/r" modifier.
 
 0.009     2023-10-11 21:31:55+02:00 Europe/Brussels
 - Support an HDFS properties file.

@@ -1,6 +1,6 @@
 package App::Oozie::Compare::LocalToHDFS;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 

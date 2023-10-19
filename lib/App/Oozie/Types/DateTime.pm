@@ -1,6 +1,6 @@
 package App::Oozie::Types::DateTime;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 

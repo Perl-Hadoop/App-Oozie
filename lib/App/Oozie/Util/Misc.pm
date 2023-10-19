@@ -1,6 +1,6 @@
 package App::Oozie::Util::Misc;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 use parent qw( Exporter );

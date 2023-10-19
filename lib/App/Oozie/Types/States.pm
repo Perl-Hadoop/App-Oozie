@@ -1,7 +1,7 @@
 ## no critic (RequireStrictDeclarations ProhibitUselessNoCritic)
 package App::Oozie::Types::States;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 

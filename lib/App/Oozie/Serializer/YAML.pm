@@ -1,6 +1,6 @@
 package App::Oozie::Serializer::YAML;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 use YAML::XS ();

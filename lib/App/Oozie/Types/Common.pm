@@ -1,6 +1,6 @@
 package App::Oozie::Types::Common;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 

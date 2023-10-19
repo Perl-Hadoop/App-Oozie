@@ -1,6 +1,6 @@
 package App::Oozie::Deploy::Validate::DAG::Vertex;
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];

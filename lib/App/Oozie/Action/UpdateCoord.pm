@@ -2,7 +2,7 @@ package App::Oozie::Action::UpdateCoord;
 
 # This is not in use yet, please go to the parent class
 
-use 5.010;
+use 5.014;
 use strict;
 use warnings;
 use parent qw( App::Oozie::Update::Coordinator );
