@@ -101,6 +101,12 @@ sub run {
 
         push @{ $command }, '-dryrun' if $self->dryrun;
 
+        $logger->info(
+            sprintf "Updating the coordinator (%s) attempt: %s",
+                        $self->coord,
+                        $try,
+        );
+
         $success = IPC::Cmd::run(
                         buffer  => \my $out,
                         command => $command,
@@ -288,6 +294,9 @@ sub _modify_xml {
 
     my $logger = $self->logger;
 
+    $logger->debug( sprintf 'Coordinator XML is being verified ...' )
+        if $self->verbose;
+
     my $twig = XML::Twig->new->parse( ${ $current_xml_ref } )
                 or die "Could not parse the original configuration";
 
@@ -410,6 +419,9 @@ sub _modify_xml {
             XML::Twig::Elt->new( 'value', {}, $v ),
         );
     }
+
+    $logger->debug( sprintf 'Coordinator XML verification completed.' )
+        if $self->verbose;
 
     return $twig, $prev_state;
 }

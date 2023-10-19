@@ -30,6 +30,7 @@ use IO::Interactive qw( is_interactive );
 use IPC::Cmd        ();
 use Ref::Util       qw( is_ref is_hashref is_arrayref );
 use Template;
+use Time::Duration  qw( duration_exact );
 use Types::Standard qw( Int );
 use XML::LibXML::Simple;
 
@@ -301,6 +302,8 @@ sub run {
 
     my $logger  = $self->logger;
 
+    my $run_start_epoch = time;
+
     for my $huh ( @_ ) {
         $logger->warn( sprintf 'Unknown parameter: %s', $huh // '[undefined]');
     }
@@ -349,7 +352,13 @@ sub run {
     # go back where we started!
     chdir $CWD if $CWD;
 
-    $logger->info( 'Finished' );
+
+    $logger->info(
+        sprintf 'Completed successfully in %s (took %s)',
+                    sprintf( '%s%s', $self->cluster_name, ( $self->dryrun ? ' (dryrun is set)' : '' ) ),
+                    duration_exact( time - $run_start_epoch ),
+    );
+
     return $success;
 }
 
