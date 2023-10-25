@@ -2,6 +2,9 @@ Revision history for App-Oozie
 
 {{$NEXT}}
 
+0.013     2023-10-25 21:09:29+02:00 Europe/Brussels
+- Silence File::Temp warning.
+
 0.012     2023-10-25 20:32:27+02:00 Europe/Brussels
 - Actually use destination_path().
 - Set the default for workflowsBaseDir.
