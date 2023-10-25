@@ -1,6 +1,8 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+- Actually use destination_path().
+- Set the default for workflowsBaseDir.
 
 0.011     2023-10-25 19:04:28+02:00 Europe/Brussels
 - More logging.

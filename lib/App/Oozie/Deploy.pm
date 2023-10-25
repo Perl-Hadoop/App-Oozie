@@ -464,7 +464,9 @@ sub __collect_internal_conf {
         ( $keep ? ' You have decided to keep it after completion' : '' )
     );
 
-    $config->{hdfs_dest} = $self->destination_path( $config->{workflowsBaseDir} );
+    $config->{workflowsBaseDir} //= $self->oozie_basepath;
+    $config->{clusterName}      //= $self->cluster_name;
+    $config->{hdfs_dest}        //= $self->destination_path( $config->{workflowsBaseDir} );
 
     # if YARN, use a different property. the oozie syntax doesn't change (still
     # uses the jobtracker property)
