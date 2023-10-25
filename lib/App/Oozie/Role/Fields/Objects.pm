@@ -18,6 +18,11 @@ use Net::Hadoop::Oozie;
 use Net::Hadoop::WebHDFS::LWP;
 use Types::Standard qw( InstanceOf );
 
+option resource_manager => (
+    is     => 'rw',
+    format => 's',
+);
+
 option timezone => (
     is       => 'rw',
     isa      => IsTZ,
@@ -105,6 +110,8 @@ defines various fields.
 =head1 Accessors
 
 =head2 Overridable from cli
+
+=head3 resource_manager
 
 =head3 timezone
 

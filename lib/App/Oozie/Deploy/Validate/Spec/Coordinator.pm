@@ -13,6 +13,7 @@ use App::Oozie::Types::Common qw( IsFile );
 with qw(
     App::Oozie::Role::Log
     App::Oozie::Role::Fields::Generic
+    App::Oozie::Role::Validate::XML
 );
 
 sub verify {
@@ -51,6 +52,12 @@ sub verify {
         sub {
             my($h, $key) = @_;
             return if $key ne 'property';
+
+            $self->validate_xml_property(
+                \$validation_errors,
+                \$total_errors,
+                $h->{property},
+            );
 
             for my $property ( @{ $h->{property} } ) {
               my $property_name = defined($property->{name})? $property->{name} : "";

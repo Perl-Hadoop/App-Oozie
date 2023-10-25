@@ -2,6 +2,9 @@ Revision history for App-Oozie
 
 {{$NEXT}}
 - More logging.
+- Validate XML variables for empty values.
+- CLI override: resource_manager
+- Enable jobXML in the sample, with a reference.
 
 0.010     2023-10-19 04:16:22+02:00 Europe/Brussels
 - perl 5.14.0 is now required for the "/r" modifier.

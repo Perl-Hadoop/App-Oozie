@@ -468,7 +468,7 @@ sub __collect_internal_conf {
 
     # if YARN, use a different property. the oozie syntax doesn't change (still
     # uses the jobtracker property)
-    $config->{jobTracker}     = $config->{resourceManager};
+    $config->{jobTracker}     = $config->{resourceManager} || $self->resource_manager;
     $config->{nameNode}     //= $self->template_namenode;
 
     $config->{has_sla}        = $self->sla;
