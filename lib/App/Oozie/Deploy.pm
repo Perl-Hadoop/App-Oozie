@@ -464,16 +464,20 @@ sub __collect_internal_conf {
         ( $keep ? ' You have decided to keep it after completion' : '' )
     );
 
+    # Override the paramters only when they are not set.
+    # For example, these keys might be set with an HDFS
+    # config file, collected before this point.
+    #
     $config->{workflowsBaseDir} //= $self->oozie_basepath;
     $config->{clusterName}      //= $self->cluster_name;
     $config->{hdfs_dest}        //= $self->destination_path( $config->{workflowsBaseDir} );
 
-    # if YARN, use a different property. the oozie syntax doesn't change (still
-    # uses the jobtracker property)
-    $config->{jobTracker}   //= $config->{resourceManager} || $self->resource_manager;
-    $config->{nameNode}     //= $self->template_namenode;
-
-    $config->{has_sla}        = $self->sla;
+    # If YARN, use a different property.
+    # The oozie syntax doesn't change
+    # (still uses the jobtracker property)
+    $config->{jobTracker}       //= $config->{resourceManager} || $self->resource_manager;
+    $config->{nameNode}         //= $self->template_namenode;
+    $config->{has_sla}            = $self->sla;
 
     $self->logger->info( "Upload directory: ".$self->destination_path );
 
