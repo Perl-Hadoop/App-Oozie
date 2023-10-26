@@ -26,7 +26,7 @@ option oozie_client_jar => (
     isa      => IsFile,
     format   => 's',
     doc      => 'Full path to the Oozie client jar containing the XML schemas',
-    default  => sub { '/usr/lib/oozie/lib/oozie-client.jar' }
+    default  => sub { '/usr/lib/oozie/lib/oozie-client.jar' },
 );
 
 option local_oozie_code_path => (

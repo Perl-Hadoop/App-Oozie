@@ -486,7 +486,7 @@ sub collect_oozie_cmd_args {
         ($self->secure_cluster ? ($hash_to_def->({ 'oozie.auth.token.cache' => 'false'}, 1)) : ()),
         @username_override,
         job => ( $self->dryrun ? '-dryrun' : '-run' ),
-        @args
+        @args,
     );
 
     if ( $self->notify ) {

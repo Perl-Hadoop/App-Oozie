@@ -251,7 +251,7 @@ has process_coord_directive_varname => (
             my $name = shift;
             return $name;
         },
-    }
+    },
 );
 
 sub BUILD {

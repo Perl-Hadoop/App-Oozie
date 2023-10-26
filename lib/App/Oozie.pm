@@ -64,7 +64,7 @@ sub run {
         '-M' . $class,
         '-E', "$class->new_with_options->run",
         '--',
-        @ARGV
+        @ARGV,
     );
 
     if ( $debug ) {
