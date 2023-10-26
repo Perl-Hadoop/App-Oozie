@@ -150,9 +150,10 @@ sub find_local_files {
     my(@local_dirs, @local_files);
     File::Find::find {
         wanted => sub {
-            (my $f = $_) =~ s{ \Q$local_path\E [/]? }{}xms;
+            my $name = $_;
+            (my $f = $name) =~ s{ \Q$local_path\E [/]? }{}xms;
             return if ! $f;
-            my $d = -d $_ ? \@local_dirs : \@local_files;
+            my $d = -d $name ? \@local_dirs : \@local_files;
             push @{ $d }, $f;
         },
         no_chdir => 1,
