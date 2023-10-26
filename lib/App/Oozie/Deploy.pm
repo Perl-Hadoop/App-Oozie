@@ -764,7 +764,12 @@ sub collect_names_to_deploy {
     my(@firstLevelMatchingPatterns, @secondLevelMatchingPatterns);
 
     # removing path separator from string's start and end
-    my @workflow = map {s{^/}{};s{/$}{}; $_} @{ $names };
+    my @workflow = map {
+        my $s = $_;
+        $s =~ s{^/}{};
+        $s =~ s{/$}{};
+        $s
+    } @{ $names };
     my $workflowPatternCount = @workflow;
 
     for my $w (@workflow) {
