@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use parent qw( App::Oozie::Forked::Template::ttree );
 
+# VERSION
+
 sub new {
     my $class = shift;
     my $log_collector = shift;

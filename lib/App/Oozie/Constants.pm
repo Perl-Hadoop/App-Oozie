@@ -6,6 +6,8 @@ use strict;
 use warnings;
 use parent qw( Exporter );
 
+# VERSION
+
 use constant OOZIE_STATES_RERUNNABLE => qw(
     KILLED
     SUSPENDED

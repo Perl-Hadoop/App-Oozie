@@ -4,6 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use App::Oozie::Util::Plugin qw(
     find_files_in_inc
     find_plugins

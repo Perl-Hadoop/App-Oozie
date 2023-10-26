@@ -7,6 +7,8 @@ use strict;
 use warnings;
 use parent qw( App::Oozie::Update::Coordinator );
 
+# VERSION
+
 1;
 
 __END__

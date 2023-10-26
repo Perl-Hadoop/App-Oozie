@@ -4,6 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use App::Oozie::Date;
 use App::Oozie::Constants qw(
     SHORTCUT_METHODS

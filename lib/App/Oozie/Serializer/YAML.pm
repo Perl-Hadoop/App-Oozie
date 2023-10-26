@@ -3,6 +3,9 @@ package App::Oozie::Serializer::YAML;
 use 5.014;
 use strict;
 use warnings;
+
+# VERSION
+
 use YAML::XS ();
 use Moo;
 

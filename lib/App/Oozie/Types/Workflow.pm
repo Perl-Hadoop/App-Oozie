@@ -4,6 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use App::Oozie::Constants qw( RE_LINEAGE_DATA_ITEM );
 use Email::Valid;
 use Sub::Quote qw( quote_sub );

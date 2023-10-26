@@ -4,6 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use Moo;
 
 sub encode { ... }

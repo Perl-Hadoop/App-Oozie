@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use parent qw( Exporter );
 
+# VERSION
+
 our @EXPORT_OK = qw(
     remove_newline
     resolve_tmp_dir

@@ -4,6 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use App::Oozie::Constants qw(
     RE_OOZIE_ID
     VALID_JOB_TYPES

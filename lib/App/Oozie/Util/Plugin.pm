@@ -5,6 +5,8 @@ use strict;
 use warnings;
 use parent qw( Exporter );
 
+# VERSION
+
 use File::Spec::Functions qw(
     catdir
     catfile

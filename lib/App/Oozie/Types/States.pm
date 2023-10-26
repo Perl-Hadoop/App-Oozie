@@ -5,6 +5,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use Type::Library -base;
 use Type::Utils -all;
 

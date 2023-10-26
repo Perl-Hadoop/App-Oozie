@@ -6,6 +6,8 @@ use 5.010;
 use strict;
 use warnings;
 
+# VERSION
+
 use App::Oozie;
 
 my $app = App::Oozie->new_with_options;

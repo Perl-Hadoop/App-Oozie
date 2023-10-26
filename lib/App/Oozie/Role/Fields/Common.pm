@@ -4,6 +4,8 @@ use 5.014;
 use strict;
 use warnings;
 
+# VERSION
+
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Types::Common qw( IsUserName );
