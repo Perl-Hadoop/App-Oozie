@@ -113,8 +113,8 @@ ETOOFAT
         $validation_errors++;
         $total_errors++;
     }
-        
-	my $validation_queue_check = 0;
+
+    my $validation_queue_check = 0;
 
     # ====================================================================== #
     # TODO: we already have the decoded XML. Get rid of this file read
