@@ -1,6 +1,8 @@
 Revision history for App-Oozie
 
 {{$NEXT}}
+- perlcritic policy + test.
+- Build tooling.
 
 0.013     2023-10-25 21:09:29+02:00 Europe/Brussels
 - Silence File::Temp warning.
