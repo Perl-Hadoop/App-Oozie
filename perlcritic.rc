@@ -1,20 +1,88 @@
-# disable these
+#
+# perlcritic --profile perlcritic.rc lib
+#
+# Some policies are temporarily disabled until
+# some refactoring happens.
+#
 
+severity  = brutal
+verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
+
+# =================== disable these =================== #
+
+[-BuiltinFunctions::ProhibitComplexMappings]
 [-BuiltinFunctions::ProhibitStringyEval]
+[-CodeLayout::ProhibitParensWithBuiltins]
 [-CodeLayout::RequireTidyCode]
 [-ControlStructures::ProhibitPostfixControls]
+[-ControlStructures::ProhibitYadaOperator]
+[-Documentation::RequirePackageMatchesPodName]
+[-Documentation::RequirePodSections]
+[-ErrorHandling::RequireCarping]
+[-InputOutput::RequireBracedFileHandleWithPrint]
 [-Modules::ProhibitAutomaticExportation]
 [-Modules::ProhibitMultiplePackages]
 [-Modules::RequireExplicitPackage]
-[-Modules::RequireVersionVar]
+[-NamingConventions::Capitalization]
+[-Subroutines::ProhibitUnusedPrivateSubroutines]
 [-ValuesAndExpressions::ProhibitConstantPragma]
+[-ValuesAndExpressions::ProhibitImplicitNewlines]
 [-ValuesAndExpressions::ProhibitLeadingZeros]
-[-ValuesAndExpressions::RequireInterpolationOfMetachars]
+[-ValuesAndExpressions::ProhibitLongChainsOfMethodCalls]
 [-Variables::ProhibitPunctuationVars]
 [-Variables::RequireInitializationForLocalVars]
 
-# enable
+# Clashes with the quoted subs in type definitions.
+[-ValuesAndExpressions::RequireInterpolationOfMetachars]
+# not sure if we'd need this
+[-BuiltinFunctions::ProhibitBooleanGrep]
 
+# ===================================================== #
+# ===================== revisit ======================= #
+
+# we need to get rid of the forked ttree
+[-Miscellanea::ProhibitUnrestrictedNoCritic]
+[-Miscellanea::ProhibitUselessNoCritic]
+
+# temporarily disable
+[-BuiltinFunctions::ProhibitUselessTopic]
+[-BuiltinFunctions::RequireBlockGrep]
+[-BuiltinFunctions::RequireBlockMap]
+[-InputOutput::ProhibitExplicitStdin]
+[-InputOutput::RequireBriefOpen]
+[-InputOutput::RequireCheckedClose]
+[-InputOutput::RequireCheckedSyscalls]
+[-References::ProhibitDoubleSigils]
+[-RegularExpressions::ProhibitEnumeratedClasses]
+[-RegularExpressions::ProhibitEscapedMetacharacters]
+[-RegularExpressions::ProhibitFixedStringMatches]
+[-RegularExpressions::ProhibitUselessTopic]
+[-Subroutines::ProhibitExcessComplexity]
+[-Subroutines::RequireArgUnpacking]
+[-Subroutines::RequireFinalReturn]
+[-ValuesAndExpressions::ProhibitCommaSeparatedStatements]
+[-ValuesAndExpressions::ProhibitEmptyQuotes]
+[-ValuesAndExpressions::ProhibitMagicNumbers]
+[-ValuesAndExpressions::ProhibitMixedBooleanOperators]
+[-ValuesAndExpressions::ProhibitNoisyQuotes]
+[-ValuesAndExpressions::RequireNumberSeparators]
+[-Variables::ProhibitReusedNames]
+
+# need to run onyl under `dzil test`, if this is enabled
+[-Modules::RequireVersionVar]
+
+[-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+
+# /xms
+[-RegularExpressions::RequireDotMatchAnything]
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+
+# ===================================================== #
+
+# ===================== enable =======================  #
+
+[BuiltinFunctions::ProhibitShiftRef]
 [BuiltinFunctions::ProhibitUniversalCan]
 [BuiltinFunctions::ProhibitUniversalIsa]
 [BuiltinFunctions::RequireGlobFunction]
@@ -22,74 +90,60 @@
 [ClassHierarchies::ProhibitExplicitISA]
 [ClassHierarchies::ProhibitOneArgBless]
 [CodeLayout::ProhibitTrailingWhitespace]
+[ControlStructures::ProhibitLabelsWithSpecialBlockNames]
 [ControlStructures::ProhibitUnlessBlocks]
 [ControlStructures::ProhibitUnreachableCode]
 [ControlStructures::ProhibitUntilBlocks]
 [ErrorHandling::RequireCheckingReturnValueOfEval]
 [InputOutput::ProhibitBarewordDirHandles]
 [InputOutput::ProhibitBarewordFileHandles]
-[InputOutput::ProhibitExplicitStdin]
 [InputOutput::ProhibitInteractiveTest]
 [InputOutput::ProhibitJoinedReadline]
 [InputOutput::ProhibitOneArgSelect]
 [InputOutput::ProhibitReadlineInForLoop]
 [InputOutput::ProhibitTwoArgOpen]
-[InputOutput::RequireBriefOpen]
 [InputOutput::RequireCheckedOpen]
 [Miscellanea::ProhibitFormats]
 [Miscellanea::ProhibitTies]
-[Modules::ProhibitAutomaticExportation]
 [Modules::ProhibitExcessMainComplexity]
-[Modules::ProhibitMultiplePackages]
 [Modules::RequireBarewordIncludes]
 [Modules::RequireEndWithOne]
-[Modules::RequireExplicitPackage]
 [Modules::RequireFilenameMatchesPackage]
-[Modules::RequireVersionVar]
 [NamingConventions::ProhibitAmbiguousNames]
 [Objects::ProhibitIndirectSyntax]
-[ControlStructures::ProhibitLabelsWithSpecialBlockNames]
-[References::ProhibitDoubleSigils]
+[RegularExpressions::ProhibitCaptureWithoutTest]
+[RegularExpressions::ProhibitComplexRegexes]
+[RegularExpressions::ProhibitUnusedCapture]
 [Subroutines::ProhibitAmpersandSigils]
 [Subroutines::ProhibitBuiltinHomonyms]
-[Subroutines::ProhibitExcessComplexity]
 [Subroutines::ProhibitExplicitReturnUndef]
 [Subroutines::ProhibitNestedSubs]
 [Subroutines::ProhibitReturnSort]
 [Subroutines::ProhibitSubroutinePrototypes]
-[Subroutines::ProhibitUnusedPrivateSubroutines]
-[Subroutines::RequireArgUnpacking]
-[Subroutines::RequireFinalReturn]
 [TestingAndDebugging::ProhibitProlongedStrictureOverride]
 [TestingAndDebugging::RequireUseStrict]
 [TestingAndDebugging::RequireUseWarnings]
-[ValuesAndExpressions::ProhibitCommaSeparatedStatements]
 [ValuesAndExpressions::ProhibitComplexVersion]
-[ValuesAndExpressions::ProhibitEmptyQuotes]
 [ValuesAndExpressions::ProhibitEscapedCharacters]
-[ValuesAndExpressions::ProhibitInterpolationOfLiterals]
-[ValuesAndExpressions::ProhibitLeadingZeros]
-[ValuesAndExpressions::ProhibitMagicNumbers]
-[ValuesAndExpressions::ProhibitMixedBooleanOperators]
-[ValuesAndExpressions::ProhibitNoisyQuotes]
+[ValuesAndExpressions::ProhibitMismatchedOperators]
 [ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]
 [ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator]
 [ValuesAndExpressions::ProhibitVersionStrings]
 [ValuesAndExpressions::RequireConstantVersion]
-[ValuesAndExpressions::RequireInterpolationOfMetachars]
-[ValuesAndExpressions::RequireNumberSeparators]
 [ValuesAndExpressions::RequireQuotedHeredocTerminator]
 [ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
 [Variables::ProhibitAugmentedAssignmentInDeclaration]
 [Variables::ProhibitConditionalDeclarations]
 [Variables::ProhibitMatchVars]
 [Variables::ProhibitPerl4PackageNames]
-[Variables::ProhibitReusedNames]
 [Variables::ProhibitUnusedVariables]
 [Variables::RequireLexicalLoopIterators]
 
+# ===================================================== #
 
-# configurable parts
+# =============== configurable policies =============== #
+
+[TestingAndDebugging::ProhibitNoWarnings]
 
 [TestingAndDebugging::ProhibitNoStrict]
 allow = refs
@@ -111,3 +165,9 @@ packages = Data::Dumper File::Find FindBin Log::Log4perl Config
 
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
+
+# ===================================================== #
+#
+# dedup
+# sort perlcritic.rc | perl -anE 'chomp; next if $_!~ m{^\[};s/[\[\]]//g;s/\-//; $n{$_}++ }{ for(keys %n){next if $n{$_}<2; say $_,"\t" ,$n{$_}}'
+#
