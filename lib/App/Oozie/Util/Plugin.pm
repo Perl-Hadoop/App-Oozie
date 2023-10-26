@@ -47,7 +47,6 @@ sub find_files_in_inc {
         my $test = catdir $path, $base_path;
         next if ! -d $test || ! -e _;
         opendir my $DIR, $test or die "Can't opendir $test: $!";
-        my @wanted;
         while ( my $file = readdir $DIR ) {
             my $fp = catfile $test, $file;
             next if    $seen_path{ $fp }++
