@@ -313,7 +313,7 @@ sub run {
 
     my $verbose = $self->verbose;
 
-    $logger->info( 'Starting' . ( $verbose ? '' : '. Enable --verbose to see the underlying commands' ) );
+    $logger->info( 'Starting' . ( $verbose ? EMPTY_STRING : '. Enable --verbose to see the underlying commands' ) );
 
     $self->basedir( $wf_dir );
 
@@ -358,7 +358,7 @@ sub run {
 
     $logger->info(
         sprintf 'Completed successfully in %s (took %s)',
-                    sprintf( '%s%s', $self->cluster_name, ( $self->dryrun ? ' (dryrun is set)' : '' ) ),
+                    sprintf( '%s%s', $self->cluster_name, ( $self->dryrun ? ' (dryrun is set)' : EMPTY_STRING ) ),
                     duration_exact( time - $run_start_epoch ),
     );
 
@@ -429,7 +429,7 @@ sub collect_oozie_cmd_args {
                             SUFFIX => '.properties',
                             DIR    => resolve_tmp_dir(),
                         );
-    my $original='';
+    my $original = EMPTY_STRING;
 
     if ( open my $ORIG_FH, '<', 'job.properties' ) {
         local $/;
@@ -527,7 +527,7 @@ sub collect_oozie_cmd_args {
         oozie_uri     => $self->oozie_uri,
         start_time    => $start_time,
         type          => $self->type,
-        workflow_path => $self->path . ($self->type eq 'bundle'? '/bundle.xml' : '') ,
+        workflow_path => $self->path . ($self->type eq 'bundle'? '/bundle.xml' : EMPTY_STRING) ,
         path          => $nameNode . $self->path,
     );
 

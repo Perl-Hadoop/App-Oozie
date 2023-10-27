@@ -8,6 +8,7 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw( EMPTY_STRING );
 use App::Oozie::Types::Common qw( IsCOORDID );
 use App::Oozie::Util::Misc qw( resolve_tmp_dir );
 
@@ -70,7 +71,11 @@ sub run {
     my $self   = shift;
     my $logger = $self->logger;
 
-    $logger->info( 'Starting' . ( $self->verbose ? '' : '. Enable --verbose to see more information' ) );
+    $logger->info(
+        sprintf 'Starting%s',
+                $self->verbose  ? EMPTY_STRING
+                                : '. Enable --verbose to see more information',
+    );
 
     my($job_meta, $job_properties) = $self->collect_current_conf;
 
@@ -125,18 +130,31 @@ sub run {
                 $state->{fix_endtime}   = 1 if $out =~ /End time can\'t be changed/;
             }
             else {
-                $logger->warn( sprintf "Coordinator %s update failed (%s): %s", $self->coord, $self->dryrun ? ' (dryrun)' : '', $out // '[no output]' );
+                $logger->warn(
+                    sprintf "Coordinator %s update failed (%s): %s",
+                                $self->coord,
+                                $self->dryrun ? ' (dryrun)' : EMPTY_STRING,
+                                $out // '[no output]',
+                );
             }
             next TRY;
         }
 
-        $logger->info( sprintf "Coordinator %s updated%s", $self->coord, $self->dryrun ? ' (dryrun)' : '' );
+        $logger->info(
+            sprintf "Coordinator %s updated%s",
+                        $self->coord,
+                        $self->dryrun ? ' (dryrun)' : EMPTY_STRING,
+        );
 
         last TRY;
     }
 
     if ( ! $success ) {
-        $logger->fatal( sprintf "Coordinator %s was NOT updated%s.", $self->coord, $self->dryrun ? ' (dryrun)' : '' );
+        $logger->fatal(
+            sprintf "Coordinator %s was NOT updated%s.",
+                        $self->coord,
+                        $self->dryrun ? ' (dryrun)' : EMPTY_STRING,
+        );
         if ( $last_out ) {
             $logger->fatal( $last_out );
             if ( $last_out =~ m{ \QFrequency can't be changed\E }xms ) {

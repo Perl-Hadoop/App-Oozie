@@ -9,7 +9,9 @@ use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Constants qw(
+    EMPTY_STRING
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
+    SPACE_CHAR
     WEBHDFS_CREATE_CHUNK_SIZE
 );
 use Cwd 'abs_path';
@@ -303,7 +305,7 @@ sub run {
         sprintf '%s Starting deployment in %s%s %s',
                     $log_marker,
                     $self->cluster_name,
-                    $self->verbose ? '' : '. Enable --verbose to see the underlying commands',
+                    $self->verbose ? EMPTY_STRING : '. Enable --verbose to see the underlying commands',
                     $log_marker,
     );
 
@@ -337,7 +339,7 @@ sub run {
     $logger->info(
         sprintf '%s Completed successfully in %s (took %s) %s',
                     $log_marker,
-                    sprintf( '%s%s', $self->cluster_name, ( $dryrun ? ' (dryrun is set)' : '' ) ),
+                    sprintf( '%s%s', $self->cluster_name, ( $dryrun ? ' (dryrun is set)' : EMPTY_STRING ) ),
                     duration_exact( time - $run_start_epoch ),
                     $log_marker,
     );
@@ -464,7 +466,7 @@ sub __collect_internal_conf {
 
     $self->logger->info(
         "Output directory: `$base_dest`.",
-        ( $keep ? ' You have decided to keep it after completion' : '' )
+        ( $keep ? ' You have decided to keep it after completion' : EMPTY_STRING )
     );
 
     # Override the paramters only when they are not set.
@@ -1031,9 +1033,9 @@ sub write_deployment_meta_file {
         my($display, $value) = @{ $row }{qw/ display value /};
         my $multi_line = $value =~ m{\n}xms;
         printf $FH "%s% -${max_len}s:%s%s%s",
-                    ( $multi_line ? "\n" : ''     ),
+                    ( $multi_line ? "\n" : EMPTY_STRING ),
                     $display,
-                    ( $multi_line ? "\n\n" : ' '  ),
+                    ( $multi_line ? "\n\n" : SPACE_CHAR ),
                     $value,
                     ( $multi_line ? "\n\n" : "\n" ),
         ;

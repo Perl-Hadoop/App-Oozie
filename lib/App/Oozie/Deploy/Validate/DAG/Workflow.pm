@@ -8,6 +8,7 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw( EMPTY_STRING );
 use App::Oozie::Deploy::Validate::DAG::Vertex;
 
 use Carp ();
@@ -146,7 +147,7 @@ sub validate {
     }
 
     for my $e ( $g->successorless_vertices ) {
-        my $type =  is_hashref( $e ) ? $e->{data}{type} : '';
+        my $type =  is_hashref( $e ) ? $e->{data}{type} : EMPTY_STRING;
         next if $type && $type =~ /^(end|kill)$/;
         push @errors,
             [

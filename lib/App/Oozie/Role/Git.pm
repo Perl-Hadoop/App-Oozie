@@ -8,6 +8,7 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw( EMPTY_STRING );
 use App::Oozie::Types::Common qw( IsDir );
 use File::Find::Rule;
 use Git::Repository;
@@ -141,7 +142,7 @@ sub _collect_git_info {
     my $verbose  = $self->verbose;
     my $logger   = $self->logger;
 
-    my $git_info = "";
+    my $git_info = EMPTY_STRING;
 
     my $file = File::Spec->abs2rel($rel_file, $repo_dir);
     my $got_basic_data = 1;

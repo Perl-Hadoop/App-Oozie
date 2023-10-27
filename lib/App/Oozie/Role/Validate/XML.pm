@@ -8,6 +8,7 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw( EMPTY_STRING );
 use Moo::Role;
 
 sub validate_xml_property {
@@ -15,7 +16,7 @@ sub validate_xml_property {
     my $validation_errors_ref = shift;
     my $total_errors_ref      = shift;
     my $prop                  = shift || return;
-    my $type                  = shift || '';
+    my $type                  = shift || EMPTY_STRING;
 
     my $logger  = $self->logger;
     my $verbose = $self->verbose;

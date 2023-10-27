@@ -8,6 +8,7 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants       qw( EMPTY_STRING );
 use App::Oozie::Types::DateTime qw( IsDateStr );
 use App::Oozie::Types::States   qw( IsOozieStateRerunnable );
 use Date::Parse ();
@@ -166,7 +167,7 @@ sub execute_reruns {
                             map { chomp; $_ }
                             @rv >= 3 ? @rv[3..$#rv] : @rv;
                     }
-                : ''
+                : EMPTY_STRING
                 ;
 
         $logger->info( 'Oozie said: ' . $msg );
@@ -318,14 +319,14 @@ sub collect {
                     ;
 
             $reruns->{ $key } = {
-                action_number    => $job->{actionNumber}     || '',
+                action_number    => $job->{actionNumber}     || EMPTY_STRING,
                 cmd              => $cmd,
-                coord_job_id     => $job->{coordJobId}       || '',
-                id               => $id                      || '',
-                last_mtime       => $job->{lastModifiedTime} || '',
+                coord_job_id     => $job->{coordJobId}       || EMPTY_STRING,
+                id               => $id                      || EMPTY_STRING,
+                last_mtime       => $job->{lastModifiedTime} || EMPTY_STRING,
                 last_mtime_epoch => $last_mtime,
-                name             => $name                    || '',
-                nominal_time     => $job->{nominalTime}      || '',
+                name             => $name                    || EMPTY_STRING,
+                nominal_time     => $job->{nominalTime}      || EMPTY_STRING,
             };
         }
     }

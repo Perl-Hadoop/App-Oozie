@@ -10,7 +10,10 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Types::Common qw( IsDir );
 use App::Oozie::Util::Misc qw( resolve_tmp_dir );
-use App::Oozie::Constants qw( TEMPLATE_DEFINE_VAR );
+use App::Oozie::Constants qw(
+    EMPTY_STRING
+    TEMPLATE_DEFINE_VAR
+);
 
 use Config::Properties;
 use Data::Dumper ();
@@ -512,7 +515,10 @@ sub _pre_process_ttconfig_into_tempfile {
     my $opt    = shift || {};
     my $logger = $self->logger;
 
-    my($fh_tmp_cfg, $tmp_cfg_file) = File::Temp::tempfile( '', DIR => resolve_tmp_dir() );
+    my($fh_tmp_cfg, $tmp_cfg_file) = File::Temp::tempfile(
+                                        EMPTY_STRING,
+                                        DIR => resolve_tmp_dir(),
+                                    );
 
     my $file = File::Spec->catfile( $self->ttlib_base_dir, 'ttree.cfg' );
     open my $FH, '<', $file or die "Failed to read $file: $!";

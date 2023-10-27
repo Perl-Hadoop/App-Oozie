@@ -8,6 +8,7 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants qw( EMPTY_STRING );
 use App::Oozie::Deploy::Validate::Oozie;
 use App::Oozie::Deploy::Validate::DAG::Workflow;
 use App::Oozie::Deploy::Validate::Spec::Coordinator;
@@ -99,7 +100,7 @@ sub maybe_parse_xml {
     my ($xml_in, $localname);
     eval {
         my $xml = App::Oozie::XML->new(
-                        data             => join('', @lines),
+                        data             => join( EMPTY_STRING, @lines ),
                         oozie_client_jar => $self->oozie_client_jar,
                         verbose          => $self->verbose,
                     );

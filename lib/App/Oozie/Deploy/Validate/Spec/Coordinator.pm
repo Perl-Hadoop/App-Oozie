@@ -12,6 +12,7 @@ use Moo;
 use MooX::Options;
 use List::MoreUtils qw( uniq );
 use App::Oozie::Types::Common qw( IsFile );
+use App::Oozie::Constants qw( EMPTY_STRING );
 
 with qw(
     App::Oozie::Role::Log
@@ -63,7 +64,7 @@ sub verify {
             );
 
             for my $property ( @{ $h->{property} } ) {
-              my $property_name = defined($property->{name})? $property->{name} : "";
+              my $property_name = defined($property->{name})? $property->{name} : EMPTY_STRING;
               #if ($property_name eq 'startDate' || $property_name eq 'endDate') {
               if (exists $blacklist{$property_name}) {
                  push @restricted_properties, $h->{$key};

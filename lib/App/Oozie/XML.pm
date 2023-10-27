@@ -8,8 +8,9 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use App::Oozie::Constants     qw( EMPTY_STRING );
 use App::Oozie::Types::Common qw( IsFile );
-use App::Oozie::Util::Misc qw( resolve_tmp_dir );
+use App::Oozie::Util::Misc    qw( resolve_tmp_dir );
 
 use Archive::Zip;
 use Clone qw( clone );
@@ -377,10 +378,10 @@ sub _build_schema {
         my $prefix = ( split /:/, ( grep $attr{$_} eq $namespace, keys %attr )[0] )[-1];
 
         # build a "version string" that can be asciibetically compared
-        my $v = join '', map sprintf( '%04d', $_ ), ( split( /\./, $version ), (0) x 5 )[ 0 .. 5 ];
+        my $v = join EMPTY_STRING, map sprintf( '%04d', $_ ), ( split( /\./, $version ), (0) x 5 )[ 0 .. 5 ];
 
         # keep name, version and xsd file for the latest version
-        if ( $v gt( $prefixes{$prefix}[2] || '' ) ) {
+        if ( $v gt( $prefixes{$prefix}[2] || EMPTY_STRING ) ) {
             $prefixes{$prefix} = [
                 $prefix,
                 $namespace,
