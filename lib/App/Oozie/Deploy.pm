@@ -131,7 +131,7 @@ has required_tt_files => (
     is      => 'ro',
     isa     => ArrayRef[Str],
     default => sub {
-        [qw(
+        return [qw(
             coordinator_config_xml
             ttree.cfg
             workflow_global_xml_end
@@ -207,7 +207,7 @@ has configuration_files => (
     default => sub {
         my $self  = shift;
         my $ttlib = $self->ttlib_base_dir;
-        [
+        return [
             File::Spec->catfile( $ttlib, 'common.properties' ),
         ],
     },

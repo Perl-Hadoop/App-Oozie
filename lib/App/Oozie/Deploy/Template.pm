@@ -85,7 +85,7 @@ has possible_readme_file_names => (
     is      => 'ro',
     isa     => ArrayRef[Str],
     default => sub {
-        [
+        return [
             qw(
                 README
                 README.md
