@@ -236,7 +236,7 @@ sub xml {
     my @queue = ($data);
     while ( my $this = shift @queue ) {
         if ( is_hashref $this ) {
-            for my $prefix ( keys %$this ) {
+            for my $prefix ( keys %{ $this } ) {
                 if ( exists $XML_NAMESPACE{$prefix} and $self->is_foreign_prefix($prefix) ) {
                     $this->{ $XML_NAMESPACE{$prefix} } =
                       $XML_SCHEMA->writer( $XML_NAMESPACE{$prefix} )
@@ -406,7 +406,7 @@ sub _build_schema {
     # clean up %prefixes
     # value = [ prefix, namespace, version, top-element, file ]
     for ( sort { $a->[2] cmp $b->[2] } values %prefixes ) {
-        my ($prefix, $namespace, $v, $version, $top, $file) = @$_;
+        my ($prefix, $namespace, $v, $version, $top, $file) = @{ $_ };
         $XML_NAMESPACE{"$prefix"} = # assume latest
         $XML_NAMESPACE{"$prefix:$version"} = XML::Compile::Util::pack_type($namespace, $top);
         $_ = $namespace;    # changes the value in %prefixes

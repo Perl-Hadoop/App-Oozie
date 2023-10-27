@@ -196,7 +196,7 @@ sub compile {
         '--verbose',
     );
 
-    for my $prop ( keys %$config ) {
+    for my $prop ( keys %{ $config } ) {
         if ( !defined $config->{$prop} ) {
             $logger->warn( "Conf error: $prop has no value defined!" )
                 if $prop ne

@@ -1050,12 +1050,12 @@ sub prune_path {
     my $self          = shift;
     my $path          = shift || die "No path was specified";
     my $files         = $self->hdfs->list($path);
-    my $total_files   = scalar @$files;
+    my $total_files   = scalar @{ $files };
     my $deleted_files = 0;
     my $deploy_start  = $self->deploy_start;
     my $dryrun        = $self->dryrun;
 
-    for my $file (@$files) {
+    for my $file ( @{ $files } ) {
 
         #next if $file->{pathSuffix} =~ /^(\.deployment|coordinator\.xml)$/;
         if (   $file->{type} eq 'FILE'
