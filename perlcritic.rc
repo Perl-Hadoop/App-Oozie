@@ -11,6 +11,8 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 # =================== disable these =================== #
 
 [-BuiltinFunctions::ProhibitComplexMappings]
+# keep being explicit
+[-BuiltinFunctions::ProhibitUselessTopic]
 [-BuiltinFunctions::ProhibitStringyEval]
 [-CodeLayout::ProhibitParensWithBuiltins]
 [-CodeLayout::RequireTidyCode]
@@ -45,7 +47,6 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [-Miscellanea::ProhibitUselessNoCritic]
 
 # temporarily disable
-[-BuiltinFunctions::ProhibitUselessTopic]
 [-BuiltinFunctions::RequireBlockGrep]
 [-BuiltinFunctions::RequireBlockMap]
 [-InputOutput::ProhibitExplicitStdin]
