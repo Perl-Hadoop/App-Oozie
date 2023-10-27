@@ -8,6 +8,10 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use constant {
+    ONE_HOUR => 3600,
+};
+
 use App::Oozie::Constants qw( EMPTY_STRING );
 use App::Oozie::Types::Common qw( IsCOORDID );
 use App::Oozie::Util::Misc qw( resolve_tmp_dir );
@@ -300,7 +304,7 @@ sub offset_one_hour {
     # coord update bug linked to oozie 3 and DST
     return Date::Format::time2str(
                 '%Y-%m-%dT%H:%MZ',
-                Date::Parse::str2time( $time->text ) - 3600,
+                Date::Parse::str2time( $time->text ) - ONE_HOUR,
                 'UTC',
             );
 }

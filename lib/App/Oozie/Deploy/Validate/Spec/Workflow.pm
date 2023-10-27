@@ -8,6 +8,10 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use constant {
+    STAT_SIZE => 7,
+};
+
 use File::Basename;
 use Moo;
 use MooX::Options;
@@ -43,7 +47,8 @@ has file_size => (
     is      => 'ro',
     default => sub {
         my $file = shift->file;
-        my $wf_size = (stat $file )[7] || die "$file either has zero size or I've failed to locate it";
+        my $wf_size = (stat $file )[STAT_SIZE]
+                        || die "$file either has zero size or I've failed to locate it";
         $wf_size;
     }
 );

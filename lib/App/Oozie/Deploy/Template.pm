@@ -8,6 +8,11 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use constant {
+    DEFAULT_FMODE => 755,
+    LAST_ELEM     => -1,
+};
+
 use App::Oozie::Types::Common qw( IsDir );
 use App::Oozie::Util::Misc qw( resolve_tmp_dir );
 use App::Oozie::Constants qw(
@@ -177,7 +182,7 @@ sub compile {
     make_path   $dest,
                 ( $self->write_ownership_to_workflow_xml ? ( $deploy_temp_lib_dir ) : () ), # we can just use this as the base is $dest but keep hem separate just in case
                 {
-                    mask => oct(755),
+                    mask => oct( DEFAULT_FMODE ),
                 };
 
     my $tt_conf_file = $self->_pre_process_ttconfig_into_tempfile({
@@ -527,7 +532,7 @@ sub _pre_process_ttconfig_into_tempfile {
         if ( /^copy/ ) {
             $logger->info(
                 sprintf "Files matching this pattern will be copied as-is: /%s/",
-                            trim +(split m{ [=] }xms, $_, 2)[-1]
+                            trim +(split m{ [=] }xms, $_, 2)[LAST_ELEM]
             );
         }
 

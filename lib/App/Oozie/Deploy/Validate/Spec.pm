@@ -8,6 +8,10 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
+use constant {
+    INDEX_NOT_FOUND => -1,
+};
+
 use App::Oozie::Constants qw( EMPTY_STRING );
 use App::Oozie::Deploy::Validate::Oozie;
 use App::Oozie::Deploy::Validate::DAG::Workflow;
@@ -163,7 +167,7 @@ sub verify {
         # ii) or even validate the basic syntax for such documents
         #        and skip Oozie schema checks (which will fail)
         #
-        if (index($xml_file, "common_datasets.xml") != -1) {
+        if (index($xml_file, "common_datasets.xml") != INDEX_NOT_FOUND) {
             next;
         }
         my $oozie_cli_validation = 1;
