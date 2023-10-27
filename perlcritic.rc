@@ -65,7 +65,6 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
-[-ValuesAndExpressions::RequireNumberSeparators]
 [-Variables::ProhibitReusedNames]
 
 # need to run onyl under `dzil test`, if this is enabled
@@ -131,6 +130,7 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator]
 [ValuesAndExpressions::ProhibitVersionStrings]
 [ValuesAndExpressions::RequireConstantVersion]
+[ValuesAndExpressions::RequireNumberSeparators]
 [ValuesAndExpressions::RequireQuotedHeredocTerminator]
 [ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
 [Variables::ProhibitAugmentedAssignmentInDeclaration]

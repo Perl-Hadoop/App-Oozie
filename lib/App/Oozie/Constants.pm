@@ -40,7 +40,7 @@ use constant {
     DEFAULT_START_DATE_DAY_FRAME            => 7,
     DEFAULT_TIMEOUT                         => 60 * 3,
     DEFAULT_TZ                              => 'CET',
-    DEFAULT_WEBHDFS_PORT                    => 14000,
+    DEFAULT_WEBHDFS_PORT                    => 14_000,
     EMPTY_STRING                            => q{},
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES => 2,
     RE_LINEAGE_DATA_ITEM                    => qr{
