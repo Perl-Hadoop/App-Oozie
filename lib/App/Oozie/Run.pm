@@ -780,7 +780,7 @@ DEFINE
 
     my %rv;
     foreach my $name ( @vars ) {
-        print "-" x 80, "\n";
+        print q{-} x 80, "\n";
         print "\t$name:\t$missing{$name}\n\n";
         my $value = $self->ask( $name );
         next if ! defined $value;

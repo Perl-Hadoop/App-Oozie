@@ -63,7 +63,7 @@ sub run {
         ( map { '-I' . $_ } @INC ),
         '-M' . $class,
         '-E', "$class->new_with_options->run",
-        '--',
+        q{--},
         @ARGV,
     );
 

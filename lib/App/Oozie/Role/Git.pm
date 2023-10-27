@@ -88,7 +88,7 @@ sub get_git_sha1_of_folder {
     my $repo_dir = $self->git_repo_path;
     my $git      = $self->git;
 
-    return $git->run('rev-list',"-1","HEAD","--",$folder);
+    return $git->run( 'rev-list', q{-1}, 'HEAD', q{--}, $folder );
 }
 
 sub get_git_info_on_all_files_in {
@@ -180,7 +180,7 @@ sub _collect_git_mtime {
     my $rv;
 
     $rv = eval {
-        my @latest_git_log_record_for_file = $self->git->run("log", "-1", "--", $file);
+        my @latest_git_log_record_for_file = $self->git->run('log', q{-1}, q{--}, $file);
 
         my $date_line_prefix        = "Date:";
         my $date_line_prefix_length = length($date_line_prefix);
@@ -277,7 +277,7 @@ sub verify_git_tag {
 
     my $fail = 0;
     foreach my $dirt ( @dirty ) {
-        my $test = $repo_dir . '/' . $dirt;
+        my $test = $repo_dir . q{/} . $dirt;
         if ( $test =~ m{ \A \Q$oozie_base_dir\E (.*) \z }xms) {
             $test = $1;
             $logger->warn( "The oozie workflow directory has untracked changes in $dirt" );

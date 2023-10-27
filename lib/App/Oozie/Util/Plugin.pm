@@ -27,7 +27,7 @@ sub find_plugins {
 
     my @found = find_files_in_inc( $base_path, $fext );
     my %action_to_class = map {
-        lc( $_->{name} ) => $base_class . '::' . $_->{name}
+        lc( $_->{name} ) => $base_class . q{::} . $_->{name}
     } @found;
 
     return \%action_to_class;

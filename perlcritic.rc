@@ -1,5 +1,5 @@
 #
-# perlcritic --profile perlcritic.rc lib
+# perlcritic --profile perlcritic.rc --quiet lib
 #
 # Some policies are temporarily disabled until
 # some refactoring happens.
@@ -65,7 +65,6 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
-[-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-ValuesAndExpressions::RequireNumberSeparators]
 [-Variables::ProhibitReusedNames]
 
@@ -127,6 +126,7 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [ValuesAndExpressions::ProhibitComplexVersion]
 [ValuesAndExpressions::ProhibitEscapedCharacters]
 [ValuesAndExpressions::ProhibitMismatchedOperators]
+[ValuesAndExpressions::ProhibitNoisyQuotes]
 [ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]
 [ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator]
 [ValuesAndExpressions::ProhibitVersionStrings]

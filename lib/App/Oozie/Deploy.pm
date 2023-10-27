@@ -275,7 +275,7 @@ sub BUILD {
     }
 
     if ( $verbose ) {
-        $logger->debug( join '=', $_, $self->$_ ) for qw(
+        $logger->debug( join q{=}, $_, $self->$_ ) for qw(
             local_oozie_code_path
             ttlib_base_dir
         );
@@ -297,7 +297,7 @@ sub run {
     my $dryrun    = $self->dryrun;
 
     my $run_start_epoch = time;
-    my $log_marker = '#' x 10;
+    my $log_marker = q{#} x 10;
 
     $logger->info(
         sprintf '%s Starting deployment in %s%s %s',
@@ -401,7 +401,7 @@ sub destination_path {
     my $default = shift || $self->default_hdfs_destination;
     return $default =~ m{ \A hdfs:// }xms
             ? $default
-            : File::Spec->canonpath( File::Spec->catdir( '/', $default ) )
+            : File::Spec->canonpath( File::Spec->catdir( q{/}, $default ) )
             ;
 }
 

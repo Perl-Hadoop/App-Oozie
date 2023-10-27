@@ -301,7 +301,7 @@ sub collect {
             next;
         }
 
-        my $key = $job->{coordJobId} . "#" . $job->{actionNumber};
+        my $key = $job->{coordJobId} . q{#} . $job->{actionNumber};
 
         # keep them in a hash, we will sort the keys so the actions are in
         # asccending order for a coordinator when issuing the bash commands; only

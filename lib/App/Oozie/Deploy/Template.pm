@@ -454,7 +454,7 @@ sub _create_wf_directive {
         my $var  = [
             map {
                 +{
-                    key   => $key_prefix . '.' . $_,
+                    key   => $key_prefix . q{.} . $_,
                     value => $self->_xml_escape( $flat->{ $_ } ),
                 }
             }
