@@ -1239,10 +1239,6 @@ sub _copy_to_hdfs_with_webhdfs {
 
 __END__
 
-# oozie_base/lib
-# oozie_base/workflows
-# ?
-
 =pod
 
 =encoding utf8
@@ -1345,4 +1341,3 @@ This is an action/program in the Oozie Tooling.
 L<App::Oozie>.
 
 =cut
-
