@@ -290,9 +290,9 @@ sub _option_build_guess_wf_path {
     }
 
     if (defined($relativePath)) {
-        # removing path separators from both sides
-        $relativePath =~ s{^/}{};
-        $relativePath =~ s{/$}{};
+        # removing  both the leading and trailing path separators
+        $relativePath =~ s{ \A [/]    }{}xms;
+        $relativePath =~ s{    [/] \z }{}xms;
         my $oozie_basepath = $self->oozie_basepath;
         $rv = File::Spec->catfile( $oozie_basepath, $relativePath);
     }
@@ -495,10 +495,19 @@ sub collect_oozie_cmd_args {
 
     if ( $self->notify ) {
         # TODO: check if this whole section can be removed
-        my %ndef = map { $_ => $prop{$_} } grep { /notification[.]url/ } keys %prop;
+        my %ndef =  map {
+                        $_ => $prop{ $_ }
+                    }
+                    grep {
+                        m{ notification[.]url }xms
+                    }
+                    keys %prop
+                    ;
+
         #if ( ! %ndef ) {
         #    die "--notify is set but the required settings are not in your configuration";
         #}
+
         push @cmd_tmpl, $hash_to_def->( \%ndef );
     }
 
@@ -547,7 +556,7 @@ sub verify_sla {
         my $raw  = $self->hdfs->read(
                         File::Spec->catfile( $self->path, "workflow.xml" )
                     );
-        if ( $raw =~ /sla:info/ ) {
+        if ( $raw =~ m{ sla[:]info }xms ) {
             if ( ! $self->sla_duration ) {
                 die "The workflow contains an SLA block, please provide an --sla-duration parameter in minutes";
             }
@@ -914,9 +923,19 @@ sub execute {
             $logger->warn( join "\n", @{ $stderr_buff } );
         }
 
-        ($outbuffer) = reverse map { split /\n/, $_ } @{ $stdout_buff };
+        ($outbuffer) = reverse
+                        map {
+                            split m{ \n }xms, $_
+                        }
+                        @{ $stdout_buff }
+                        ;
 
-        if ( $outbuffer =~ m/([0-9-]+oozie-oozi-[CWB])/ ) {
+        if (
+            # TODO: move to constant
+            $outbuffer =~ m{
+                ([0-9-]+ oozie-oozi- [CWB])
+            }xms
+        ) {
             my $job_id =  $1;
             $self->log_console_url( $job_id );
         }
