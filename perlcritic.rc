@@ -83,6 +83,7 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [Subroutines::ProhibitNestedSubs]
 [Subroutines::ProhibitReturnSort]
 [Subroutines::ProhibitSubroutinePrototypes]
+[TestingAndDebugging::ProhibitNoWarnings]
 [TestingAndDebugging::ProhibitProlongedStrictureOverride]
 [TestingAndDebugging::RequireUseStrict]
 [TestingAndDebugging::RequireUseWarnings]
@@ -107,10 +108,7 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [Variables::RequireLexicalLoopIterators]
 
 # ===================================================== #
-
 # =============== configurable policies =============== #
-
-[TestingAndDebugging::ProhibitNoWarnings]
 
 [TestingAndDebugging::ProhibitNoStrict]
 allow = refs
@@ -137,7 +135,7 @@ allow_leading_tabs = 0
 # ===================================================== #
 # ===================================================== #
 
-# ============== Permanently disable these ============== #
+# ============= Permanently disable these ============= #
 
 [-BuiltinFunctions::ProhibitComplexMappings]
 # keep being explicit
@@ -174,7 +172,8 @@ allow_leading_tabs = 0
 [-Modules::RequireVersionVar]
 
 # ===================================================== #
-#
+# ===================================================== #
+# ===================================================== #
 # dedup
 # sort perlcritic.rc | perl -anE 'chomp; next if $_!~ m{^\[};s/[\[\]]//g;s/\-//; $n{$_}++ }{ for(keys %n){next if $n{$_}<2; say $_,"\t" ,$n{$_}}'
-#
+# ===================================================== #
