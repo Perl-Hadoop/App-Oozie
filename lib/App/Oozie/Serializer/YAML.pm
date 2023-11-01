@@ -12,13 +12,13 @@ use Moo;
 sub encode {
     my $self = shift;
     my $data = shift;
-    YAML::XS::Dump( $data );
+    return YAML::XS::Dump( $data );
 }
 
 sub decode {
     my $self = shift;
     my $data = shift;
-    YAML::XS::Load( $data );
+    return YAML::XS::Load( $data );
 }
 
 1;

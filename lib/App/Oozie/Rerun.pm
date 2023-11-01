@@ -111,9 +111,11 @@ sub run {
         $logger->info( "No failed jobs matching your conditions" );
         return;
     };
-    $self->execute ? $self->execute_reruns( $reruns )
-                   : $self->dump_for_shell( $reruns )
-                   ;
+
+    return $self->execute
+                ? $self->execute_reruns( $reruns )
+                : $self->dump_for_shell( $reruns )
+                ;
 }
 
 sub execute_reruns {
@@ -175,6 +177,8 @@ sub execute_reruns {
 
         $logger->info( 'Oozie said: ' . $msg );
     }
+
+    return;
 }
 
 sub dump_for_shell {
@@ -224,6 +228,8 @@ COMMAND
 : the lines starting with a colon like this one will be no-ops, so you can paste them too.
 
 MSG
+
+    return;
 }
 
 sub collect {

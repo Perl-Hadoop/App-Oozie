@@ -139,7 +139,10 @@ sub _init_data {
 
         };
     }
+
     $self->data( $data );
+
+    return;
 }
 
 sub _probe_parse_error_for_workflow {
@@ -215,7 +218,7 @@ NEED_AT_LEAST_TWO
 sub localname {
     my ($self) = @_;
     my $type = $XML_NAMESPACE{ $self->prefix };
-    ( XML::Compile::Util::unpack_type( $type ) )[-1]
+    return +( XML::Compile::Util::unpack_type( $type ) )[-1];
 }
 
 sub is_foreign_prefix {
@@ -288,6 +291,8 @@ sub sniff_doc {
     else {
         $logger->logdie("Can't get namespace URI from xml document: ".trim($doc));
     }
+
+    return;
 }
 
 sub _build_schema {
@@ -417,7 +422,7 @@ sub _build_schema {
     }
 
     # build the final $XML_SCHEMA object
-    XML::Compile::Cache->new(
+    return XML::Compile::Cache->new(
         \@xsd,
         prefixes         => \%prefixes,
         allow_undeclared => 1,

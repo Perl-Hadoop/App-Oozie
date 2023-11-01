@@ -128,7 +128,7 @@ sub maybe_parse_xml {
 sub local_xml_files {
     my $self = shift;
     my $dest = $self->local_path;
-    File::Find::Rule
+    return File::Find::Rule
             ->file
             ->maxdepth( 1       )
             ->name(     '*.xml' )

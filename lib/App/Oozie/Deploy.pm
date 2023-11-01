@@ -494,9 +494,8 @@ sub max_wf_xml_length {
     my $ooz_admin = $self->oozie->admin('configuration');
     my $conf_val  = $ooz_admin->{'oozie.service.WorkflowAppService.WorkflowDefinitionMaxLength'};
 
-    return $conf_val if $conf_val;
-
-    $self->logger->logdie( "Unable to fetch the ooozie configuration WorkflowDefinitionMaxLength!" );
+    return $conf_val
+            || $self->logger->logdie( "Unable to fetch the ooozie configuration WorkflowDefinitionMaxLength!" );
 }
 
 sub guess_running_coordinator {
@@ -610,6 +609,8 @@ sub __maybe_dump_xml_to_json {
         print $JSON_FH JSON->new->pretty->encode( $parsed->{xml_in} );
         close $JSON_FH;
     }
+
+    return;
 }
 
 sub compile_templates {
@@ -752,6 +753,7 @@ sub verify_temp_dir {
 
     delete $ENV{TMPDIR} if $remove;
 
+    return;
 }
 
 sub collect_names_to_deploy {

@@ -269,7 +269,7 @@ sub dump_graph {
     my $self = shift;
     my $type = shift || die "No type was defined!";
     my $sub  = $self->can('_dump_' . $type ) || die "$type is not a valid type";
-    $self->$sub();
+    return $self->$sub();
 }
 
 sub _dump_perl {

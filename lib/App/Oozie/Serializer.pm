@@ -79,7 +79,7 @@ sub encode {
 
     $self->_assert_type( $data ) if $self->enforce_type;
 
-    $self->__object->encode( $data )
+    return $self->__object->encode( $data )
 }
 
 sub decode {

@@ -71,13 +71,13 @@ has git => (
 sub get_latest_git_commit {
     my $self = shift;
     die "Git features are disabled!" if ! $self->gitfeatures;
-    $self->git->run( 'rev-parse' => 'HEAD' );
+    return $self->git->run( 'rev-parse' => 'HEAD' );
 }
 
 sub get_git_status {
     my $self = shift;
     die "Git features are disabled!" if ! $self->gitfeatures;
-    $self->git->run( status => qw( -s -b --porcelain ) );
+    return $self->git->run( status => qw( -s -b --porcelain ) );
 }
 
 sub get_git_sha1_of_folder {
