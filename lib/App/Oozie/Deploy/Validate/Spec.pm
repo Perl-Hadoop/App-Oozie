@@ -85,7 +85,13 @@ sub maybe_parse_xml {
     my @lines = do {
         open my $FH, '<', $xml_file or die "Failed to read $xml_file: $!";
         my @rv = <$FH>;
-        close $FH;
+        if ( ! close $FH ) {
+            $self->logger->warn(
+                sprintf 'Failed to close %s: %s',,
+                            $xml_file,
+                            $!,
+            );
+        }
         @rv;
     };
 

@@ -145,7 +145,13 @@ ETOOFAT
             $validation_queue_check++;
         }
     }
-    close $FH;
+    if ( ! close $FH ) {
+        $self->logger->warn(
+            sprintf 'Failed to close %s: %s',,
+                        $file,
+                        $!,
+        );
+    }
     # ====================================================================== #
 
     if ( !$validation_queue_check ) {

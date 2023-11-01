@@ -12,6 +12,7 @@ use App::Oozie::Constants       qw(
     DEFAULT_OOZIE_MAX_JOBS
     EMPTY_STRING
     HOURS_IN_A_DAY
+    ONE_HOUR
     RE_AT
 );
 use App::Oozie::Types::DateTime qw( IsDateStr );

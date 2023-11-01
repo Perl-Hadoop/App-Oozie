@@ -437,11 +437,18 @@ sub collect_oozie_cmd_args {
                             DIR    => resolve_tmp_dir(),
                         );
     my $original = EMPTY_STRING;
+    my $orig_filename = 'job.properties';
 
-    if ( open my $ORIG_FH, '<', 'job.properties' ) {
+    if ( open my $ORIG_FH, '<', $orig_filename ) {
         local $/;
         $original = <$ORIG_FH>;
-        close $ORIG_FH;
+        if ( ! close $ORIG_FH ) {
+            $logger->warn(
+                sprintf 'Failed to close %s: %s',
+                            $orig_filename,
+                            $!,
+            );
+        }
     }
 
     $override_file->print( $original, "\n\n" );
@@ -811,10 +818,18 @@ sub collect_properties {
     my $self = shift;
     my %rv;
 
+    my $orig_filename = 'job.properties';
+
     my $properties = Config::Properties->new;
     open my $FH, '<', 'job.properties' or die 'Cannot open job.properties';
     $properties->load($FH);
-    close $FH;
+    if ( ! close $FH ) {
+        $self->logger->warn(
+            sprintf 'Failed to close %s: %s',
+                        $orig_filename,
+                        $!,
+        );
+    }
 
     if ( my $uname = $properties->getProperty('user.name') ) {
         $self->logger->info( "Collected user.name override = $uname" );

@@ -10,12 +10,14 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Constants qw(
     DEFAULT_DIR_MODE
+    DEFAULT_FILE_MODE
     EMPTY_STRING
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
     MILISEC_DIV
     MODE_BITSHIFT_READ
     SPACE_CHAR
     STAT_MODE
+    TERMINAL_LINE_LEN
     WEBHDFS_CREATE_CHUNK_SIZE
 );
 use Cwd 'abs_path';
@@ -321,7 +323,7 @@ sub run {
         # Possible removal in a future version.
         #
         # unsafe, but needed when uploading with mapred's uid or hdfs dfs cannot see the files
-        chmod oct( DEFAULT_FMODE ), $config->{base_dest};
+        chmod oct( DEFAULT_FILE_MODE ), $config->{base_dest};
     }
 
     my $success = $self->upload_to_hdfs;
@@ -448,7 +450,13 @@ sub __collect_internal_conf {
             }
             open my $FH, '<', $file or $logger->logdie( sprintf "Failed to read %s: %s", $file, $! );
             $properties->load( $FH );
-            close $FH;
+            if ( ! close $FH ) {
+                $logger->warn(
+                    sprintf 'Failed to close %s: %s',,
+                                $file,
+                                $!,
+                );
+            }
             $config = {
                 %{ $config },
                 $properties->properties,
@@ -611,7 +619,13 @@ sub __maybe_dump_xml_to_json {
         File::Path::make_path( $dump_path );
         open my $JSON_FH, '>', $json_filename or $logger->logdie( sprintf "Failed to create %s: %s", $json_filename, $! );
         print $JSON_FH JSON->new->pretty->encode( $parsed->{xml_in} );
-        close $JSON_FH;
+        if ( ! close $JSON_FH ) {
+            $logger->warn(
+                sprintf 'Failed to close %s: %s',,
+                            $json_filename,
+                            $!,
+            );
+        }
     }
 
     return;
@@ -1048,7 +1062,13 @@ sub write_deployment_meta_file {
     for my $row ( @{ $meta } ) {
         printf $FH $compute_meta_row->( $row );
     }
-    close $FH;
+    if ( ! close $FH ) {
+        $self->logger->warn(
+            sprintf 'Failed to close %s: %s',,
+                        $file,
+                        $!,
+        );
+    }
 
     return;
 }

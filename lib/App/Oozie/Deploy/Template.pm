@@ -127,7 +127,13 @@ sub get_job_conf {
 
     open my $FH, '<', $file or die "Cannot open $file";
     $p->load($FH);
-    close $FH;
+    if ( ! close $FH ) {
+        $self->logger->warn(
+            sprintf 'Failed to close %s: %s',,
+                        $file,
+                        $!,
+        );
+    }
 
     my %c = $p->properties;
     for my $key ( keys %c ) {
@@ -506,7 +512,13 @@ TMPL
 
     open my $FH, '>', $var_file or die "Can't write to $var_file: $!";
     print $FH "$buf\n";
-    close $FH;
+    if ( ! close $FH ) {
+        $self->logger->warn(
+            sprintf 'Failed to close %s: %s',,
+                        $var_file,
+                        $!,
+        );
+    }
 
     $self->logger->debug( sprintf 'meta file created as: %s', $var_file )
         if $self->verbose;
@@ -542,7 +554,13 @@ sub _pre_process_ttconfig_into_tempfile {
         $maybe_log_line->( $_ );
         print $fh_tmp_cfg $_;
     }
-    close $FH;
+    if ( ! close $FH ) {
+        $self->logger->warn(
+            sprintf 'Failed to close %s: %s',,
+                        $file,
+                        $!,
+        );
+    }
 
     # Attach the correct lib dir to the conf
     printf $fh_tmp_cfg "\nlib = %s\n", $self->ttlib_base_dir;
@@ -551,8 +569,6 @@ sub _pre_process_ttconfig_into_tempfile {
     if ( $opt->{temp_lib} && -d $opt->{temp_lib} && -r _ ) {
         printf $fh_tmp_cfg "\nlib = %s\n", $opt->{temp_lib};
     }
-
-    close $FH;
 
     $logger->debug( sprintf 'TT conf file created as %s', $tmp_cfg_file )
         if $self->verbose;

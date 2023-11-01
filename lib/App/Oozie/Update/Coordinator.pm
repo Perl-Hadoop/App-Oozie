@@ -227,7 +227,13 @@ sub collect_current_conf {
             $logger->info( sprintf 'job.properties exists on local file system. Fetching %s', $jp_local_path );
             open my $FH, '<', $jp_local_path or die "Can't read $jp_local_path: $!";
             $jp =  do { local $/; <$FH> };
-            close $FH;
+            if ( ! close $FH ) {
+                $logger->warn(
+                    sprintf 'Failed to close %s: %s',,
+                                $jp_local_path,
+                                $!,
+                );
+            }
         }
         else {
             my $uh_oh = sprintf <<'FYI', Cwd::getcwd, $base_path;
@@ -485,13 +491,19 @@ sub _show_twig {
     my $twig   = shift;
     my $logger = $self->logger;
 
+    $logger->debug( "Start new XML configuration" );
+
     open my $BUF, '>', \my $dump
         or die "Failed to create an in-memory filehandle: $!";
 
-    $logger->debug( "Start new XML configuration" );
-
     $twig->flush( $BUF );
-    close $BUF;
+
+    if ( ! close $BUF ) {
+        $logger->warn(
+            sprintf 'Failed to close in-memory XML twig: %s',,
+                        $!,
+        );
+    }
 
     $logger->debug( $dump );
     $logger->debug( "End new XML configuration" );

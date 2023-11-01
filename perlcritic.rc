@@ -33,7 +33,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-BuiltinFunctions::RequireBlockMap]
 [-InputOutput::ProhibitExplicitStdin]
 [-InputOutput::RequireCheckedClose]
-[-InputOutput::RequireCheckedSyscalls]
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::RequireArgUnpacking]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
@@ -120,6 +119,9 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
+
+[InputOutput::RequireCheckedSyscalls]
+exclude_functions = print
 
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
