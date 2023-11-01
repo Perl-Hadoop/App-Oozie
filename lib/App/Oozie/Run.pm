@@ -195,6 +195,10 @@ option doas => (
 sub setup_dates {
     my $self = shift;
 
+    state $is_shortcut_date = {
+        map { $_ => 1 } SHORTCUT_METHODS
+    };
+
     return if $self->dates_from_properties;
 
     my $date = $self->date;
@@ -234,7 +238,7 @@ sub setup_dates {
 
     $enddate //= $date->move( $date->today, DEFAULT_END_DATE_DAYS );
 
-    if ( $enddate =~ /^(today|yesterday|tomorrow)$/ ) {
+    if ( $is_shortcut_date->{ $enddate } ) {
         $enddate = $date->$enddate();
     }
 
