@@ -1,4 +1,3 @@
-## no critic (RequireStrictDeclarations ProhibitUselessNoCritic)
 package App::Oozie::Constants;
 
 use 5.014;

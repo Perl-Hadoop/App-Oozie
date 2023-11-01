@@ -760,7 +760,7 @@ sub check_coordinator_function_calls {
         } or do {
             my $eval_error = $@ || 'Zombie error';
             my $log_level = $conf =~ m{ workflow }xms ? 'logdie' : 'warn';
-            $logger->$log_level( $eval_error ); ## no critic (ProhibitDynamicCall)
+            $logger->$log_level( $eval_error );
             1;
         };
     }
