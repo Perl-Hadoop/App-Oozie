@@ -36,7 +36,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-InputOutput::RequireCheckedSyscalls]
 [-RegularExpressions::ProhibitEnumeratedClasses]
 [-RegularExpressions::ProhibitFixedStringMatches]
-[-RegularExpressions::ProhibitUselessTopic]
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::RequireArgUnpacking]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
