@@ -28,7 +28,7 @@ USAGE
 use App::Oozie::Deploy::Template;
 use App::Oozie::Deploy::Validate::Spec;
 use App::Oozie::Types::Common qw( IsDir IsFile );
-use App::Oozie::Util::Misc qw( resolve_tmp_dir );
+use App::Oozie::Util::Misc qw( resolve_tmp_dir trim_slashes );
 use App::Oozie::Constants qw( OOZIE_STATES_RUNNING );
 
 use Carp ();
@@ -223,7 +223,7 @@ has email_validator => (
                 $self->logger->warn( "No email was set!" );
                 return;
             };
-            my @splits = map s/\+.+?@/@/r, map s/^\s+|\s+$//gr, split q{,}, $emails; ## no critic (ProhibitStringySplit)
+            my @splits = map s/\+.+?@/@/r, map s/^\s+|\s+$//gr, split q{,}, $emails; ## no critic (ProhibitStringySplit,RequireDotMatchAnything,RequireExtendedFormatting,RequireLineBoundaryMatching)
             my @invalids = grep { ! Email::Valid->address( $_ ) } @splits;
             return 1 if ! @invalids;
             for my $bogus ( @invalids ) {
@@ -768,17 +768,11 @@ sub collect_names_to_deploy {
 
     my(@firstLevelMatchingPatterns, @secondLevelMatchingPatterns);
 
-    # removing path separator from string's start and end
-    my @workflow = map {
-        my $s = $_;
-        $s =~ s{^/}{};
-        $s =~ s{/$}{};
-        $s
-    } @{ $names };
+    my @workflow = map { trim_slashes( $_ ) } @{ $names };
     my $workflowPatternCount = @workflow;
 
     for my $w (@workflow) {
-        my $separators = () = $w =~ /\//g;
+        my $separators = () = $w =~ m{ [/] }xmsg;
 
         # disallow the case with going up the tree ".." ?
         if ( $separators == 0 ) {
@@ -797,7 +791,10 @@ MSG
         }
     }
 
-    @firstLevelMatchingPatterns = map {qr/^$_$/} @firstLevelMatchingPatterns;
+    @firstLevelMatchingPatterns = map {
+                                        qr{ \A \Q$_\E \z }xms
+                                    }
+                                    @firstLevelMatchingPatterns;
 
     # Transform the patterns in actual, existing directories
     my @firstLevelWorkflows =
