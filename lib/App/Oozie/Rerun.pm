@@ -32,7 +32,7 @@ USAGE
 
 use constant {
     RE_AT => qr{ \@ }xms,
-}
+};
 
 with qw(
     App::Oozie::Role::Log
