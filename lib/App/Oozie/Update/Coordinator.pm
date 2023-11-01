@@ -36,6 +36,10 @@ Usage: %c %o [options] --coord <coord id>
 USAGE
 ;
 
+use constant {
+    RE_EQUAL => qr{ [=] }xms,
+};
+
 with qw(
     App::Oozie::Role::Log
     App::Oozie::Role::Fields::Common
@@ -130,8 +134,13 @@ sub run {
 
         if ( ! $success ) {
             if ( $out ) {
-                $state->{fix_starttime} = 1 if $out =~ /Start time can\'t be changed/;
-                $state->{fix_endtime}   = 1 if $out =~ /End time can\'t be changed/;
+                if ( $out =~ m{ \QStart time can't be changed\E }xms ) {
+                    $state->{fix_starttime} = 1;
+                }
+
+                if ( $out =~ m{ \QEnd time can't be changed\E }xms ) {
+                    $state->{fix_endtime} = 1;
+                }
             }
             else {
                 $logger->warn(
@@ -327,12 +336,17 @@ sub _modify_xml {
 
     # clean up former mistakes...
     for my $elem ( $twig->root->children ) {
-         $elem->delete if $elem->first_child_text =~ /^"oozie\./;
+        if ( $elem->first_child_text =~ m{ \A ["]oozie[.] }xms ) {
+            $elem->delete;
+        }
     }
 
     SYNC_END_TIME_IN_XML_CONF: {
         for my $elem ( $twig->root->children ) {
-            for my $date_field (qw/ endTime startTime /) {
+            for my $date_field (qw/
+                endTime
+                startTime
+            /) {
                 if ( $elem->first_child_text eq $date_field ) {
                     my($cur) = $elem->get_xpath('./value');
                     my $meta_val = $date_field eq 'endTime'   ? $meta_endTime
@@ -422,7 +436,7 @@ sub _modify_xml {
     }
 
     for ( @{ $self->define } ) {
-        my ( $k, $v ) = split /=/, $_, 2;
+        my ( $k, $v ) = split RE_EQUAL, $_, 2;
         $twig->root->insert_new_elt(
             'last_child',
             'property',
