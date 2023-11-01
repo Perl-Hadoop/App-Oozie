@@ -40,7 +40,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::RequireArgUnpacking]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
-[-ValuesAndExpressions::ProhibitMagicNumbers]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
 
 # ===================== Enable ======================== #
@@ -101,6 +100,7 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [ValuesAndExpressions::ProhibitComplexVersion]
 [ValuesAndExpressions::ProhibitEmptyQuotes]
 [ValuesAndExpressions::ProhibitEscapedCharacters]
+[ValuesAndExpressions::ProhibitMagicNumbers]
 [ValuesAndExpressions::ProhibitMismatchedOperators]
 [ValuesAndExpressions::ProhibitNoisyQuotes]
 [ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]

@@ -10,8 +10,16 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Constants qw(
     EMPTY_STRING
+    LAST_ELEM
+    MIN_OOZIE_SCHEMA_VERSION_FOR_SLA
+    MIN_OOZIE_SLA_VERSION
     RE_COLON
     RE_DOT
+    XML_LOCALNAME_POS
+    XML_NS_FIRST_POS
+    XML_UNPACK_LOCALNAME_POS
+    XML_VERSION_PADDING
+    XML_VERSION_POS
 );
 use App::Oozie::Types::Common qw( IsFile );
 use App::Oozie::Util::Misc    qw( resolve_tmp_dir );
@@ -182,14 +190,14 @@ sub _probe_parse_error_for_workflow {
 
     my @extra_error;
 
-    if ( defined $sla_version && $sla_version < 0.2 ) {
+    if ( defined $sla_version && $sla_version < MIN_OOZIE_SLA_VERSION ) {
         push @extra_error,
             "Schema version mismatch for the SLA feature!",
             "Your sla definition refers to a schema older than the minimum required version of 0.2 (you have defined $sla_version).",
         ;
     }
 
-    if ( defined $wf_version && $wf_version < 0.5 ) {
+    if ( defined $wf_version && $wf_version < MIN_OOZIE_SCHEMA_VERSION_FOR_SLA ) {
         push @extra_error,
             "Schema version mismatch for the SLA feature!",
             "Your workflow definition refers to a schema older than the minimum required version of 0.5 (you have defined $wf_version).",
@@ -218,16 +226,16 @@ NEED_AT_LEAST_TWO
 sub localname {
     my ($self) = @_;
     my $type = $XML_NAMESPACE{ $self->prefix };
-    return +( XML::Compile::Util::unpack_type( $type ) )[-1];
+    return +( XML::Compile::Util::unpack_type( $type ) )[LAST_ELEM];
 }
 
 sub is_foreign_prefix {
     my ($self, $prefix) = @_;
     my ($ns, $localname) = XML::Compile::Util::unpack_type($XML_NAMESPACE{$self->prefix});
-    my $nsobj = ($XML_SCHEMA->namespaces->namespace($ns))[0];
+    my $nsobj = ( $XML_SCHEMA->namespaces->namespace($ns) )[XML_NS_FIRST_POS];
     my %elements =
         map { lc $_ => 1 }
-        map { (XML::Compile::Util::unpack_type($_))[1] }
+        map { (XML::Compile::Util::unpack_type($_))[XML_UNPACK_LOCALNAME_POS] }
         $nsobj->elements, $nsobj->types;
     return not exists $elements{$prefix};
 }
@@ -280,7 +288,7 @@ sub sniff_doc {
     my $namespace = $root->getNamespaceURI;
 
     if ($namespace) {
-        my ($localname, $version) = (split RE_COLON, $namespace )[-2, -1];
+        my ($localname, $version) = (split RE_COLON, $namespace )[XML_LOCALNAME_POS, XML_VERSION_POS];
         if ($localname and $version) {
             return $localname, $version;
         }
@@ -383,11 +391,17 @@ sub _build_schema {
             next;
         }
         my $namespace = delete $attr{targetNamespace};
-        my $version   = ( split RE_COLON, $namespace )[-1]; # assuming uri:oozie:...:$version
-        my $prefix    = ( split RE_COLON, ( grep $attr{$_} eq $namespace, keys %attr )[0] )[-1];
+        my $version   = ( split RE_COLON, $namespace )[LAST_ELEM]; # assuming uri:oozie:...:$version
+        my $prefix    = ( split RE_COLON, ( grep $attr{$_} eq $namespace, keys %attr )[0] )[LAST_ELEM];
 
         # build a "version string" that can be asciibetically compared
-        my $v = join EMPTY_STRING, map sprintf( '%04d', $_ ), ( split( RE_DOT, $version ), (0) x 5 )[ 0 .. 5 ];
+        my $v = join EMPTY_STRING,
+                map sprintf( '%04d', $_ ),
+                    (
+                        split( RE_DOT, $version ),
+                        (0) x XML_VERSION_PADDING
+                    )[ 0 .. XML_VERSION_PADDING ]
+                ;
 
         # keep name, version and xsd file for the latest version
         if ( $v gt( $prefixes{$prefix}[2] || EMPTY_STRING ) ) {

@@ -9,9 +9,13 @@ use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Constants qw(
+    DEFAULT_DIR_MODE
     EMPTY_STRING
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
+    MILISEC_DIV
+    MODE_BITSHIFT_READ
     SPACE_CHAR
+    STAT_MODE
     WEBHDFS_CREATE_CHUNK_SIZE
 );
 use Cwd 'abs_path';
@@ -299,7 +303,7 @@ sub run {
     my $dryrun    = $self->dryrun;
 
     my $run_start_epoch = time;
-    my $log_marker = q{#} x 10;
+    my $log_marker = q{#} x TERMINAL_LINE_LEN;
 
     $logger->info(
         sprintf '%s Starting deployment in %s%s %s',
@@ -317,7 +321,7 @@ sub run {
         # Possible removal in a future version.
         #
         # unsafe, but needed when uploading with mapred's uid or hdfs dfs cannot see the files
-        chmod 0755, $config->{base_dest};
+        chmod oct( DEFAULT_FMODE ), $config->{base_dest};
     }
 
     my $success = $self->upload_to_hdfs;
@@ -737,8 +741,8 @@ sub verify_temp_dir {
         $remove = 1;
     }
     else {
-        my $mode       = (stat $user_setting)[2];
-        my $group_read = ( $mode & S_IRGRP ) >> 3;
+        my $mode       = (stat $user_setting)[STAT_MODE];
+        my $group_read = ( $mode & S_IRGRP ) >> MODE_BITSHIFT_READ;
         my $other_read =   $mode & S_IROTH;
 
         if ( ! $group_read || ! $other_read ) {
@@ -1062,12 +1066,12 @@ sub prune_path {
 
         #next if $file->{pathSuffix} =~ /^(\.deployment|coordinator\.xml)$/;
         if (   $file->{type} eq 'FILE'
-            && $file->{modificationTime} / 1000 < $deploy_start
+            && $file->{modificationTime} / MILISEC_DIV < $deploy_start
         ) {
             my $msg = sprintf "old file found in destination: %s (mtime %s) -> %s",
                                 $file->{pathSuffix},
                                 $self->date->epoch_yyyy_mm_dd_hh_mm_ss(
-                                    int( $file->{modificationTime} / 1000 )
+                                    int( $file->{modificationTime} / MILISEC_DIV )
                                 ),
                                 $dryrun ? 'would have deleted if dryrun was not specified' : 'is now deleted',
                         ;
@@ -1081,7 +1085,7 @@ sub prune_path {
             my $msg = sprintf "Directory found in destination: %s (mtime %s) -> checking contents",
                             $file->{pathSuffix},
                             $self->date->epoch_yyyy_mm_dd_hh_mm_ss(
-                                int( $file->{modificationTime} / 1000 )
+                                int( $file->{modificationTime} / MILISEC_DIV )
                             ),
                         ;
             $self->logger->info( $msg );
@@ -1183,7 +1187,7 @@ sub _copy_to_hdfs_with_webhdfs {
                 );
             }
             $hdfs->mkdir( $remote_base );
-            $hdfs->chmod( $remote_base, 775 );
+            $hdfs->chmod( $remote_base, DEFAULT_DIR_MODE );
         }
         # since the above calls were silent, see if this throws anything
         if ( $hdfs->exists($destFolder) ) {
@@ -1223,7 +1227,7 @@ sub _copy_to_hdfs_with_webhdfs {
                         $dest
             );
         }
-        $hdfs->chmod($dest, 775);
+        $hdfs->chmod( $dest, DEFAULT_DIR_MODE );
     }
 
     my $d_rule = File::Find::Rule->new->directory->maxdepth(1)->mindepth(1);

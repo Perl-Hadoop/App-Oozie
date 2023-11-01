@@ -6,7 +6,10 @@ use warnings;
 
 # VERSION
 
-use App::Oozie::Constants qw( RE_LINEAGE_DATA_ITEM );
+use App::Oozie::Constants qw(
+    RE_LINEAGE_DATA_ITEM
+    MIN_LEN_JUSTIFICATION
+);
 use Email::Valid;
 use Sub::Quote qw( quote_sub );
 use Type::Library -base;
@@ -36,6 +39,7 @@ my $LineageDataItem = declare LineageDataItem => as Str,
     ),
 ;
 
+my $Justification_min_len = MIN_LEN_JUSTIFICATION;
 my $Justification = declare Justification => as Str,
     constraint => quote_sub(
         q{
@@ -57,7 +61,7 @@ my $Justification = declare Justification => as Str,
             return 1;
         },
         {
-           '$min_length' => \200,
+           '$min_length' => \$Justification_min_len,
         },
     ),
 ;

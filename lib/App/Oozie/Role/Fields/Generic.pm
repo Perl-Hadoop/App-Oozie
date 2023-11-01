@@ -10,6 +10,7 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Constants qw(
     DEFAULT_TIMEOUT
+    DEFAULT_MAX_RETRY
 );
 
 use Moo::Role;
@@ -31,7 +32,7 @@ option force => (
 option max_retry => (
     is       => 'rw',
     isa      => Int,
-    default  => sub { 3 },
+    default  => sub { DEFAULT_MAX_RETRY },
     doc      => 'Maximum number of retries for various function calls',
 );
 

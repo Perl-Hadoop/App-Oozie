@@ -11,7 +11,7 @@ use namespace::autoclean -except => [qw/_options_data _options_config/];
 use App::Oozie::Types::Common qw( IsDir );
 use App::Oozie::Util::Misc qw( resolve_tmp_dir );
 use App::Oozie::Constants qw(
-    DEFAULT_FMODE
+    DEFAULT_FILE_MODE
     EMPTY_STRING
     LAST_ELEM
     TEMPLATE_DEFINE_VAR
@@ -181,7 +181,7 @@ sub compile {
     make_path   $dest,
                 ( $self->write_ownership_to_workflow_xml ? ( $deploy_temp_lib_dir ) : () ), # we can just use this as the base is $dest but keep hem separate just in case
                 {
-                    mask => oct( DEFAULT_FMODE ),
+                    mask => oct( DEFAULT_FILE_MODE ),
                 };
 
     my $tt_conf_file = $self->_pre_process_ttconfig_into_tempfile({

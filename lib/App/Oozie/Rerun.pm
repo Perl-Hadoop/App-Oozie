@@ -9,7 +9,9 @@ use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use App::Oozie::Constants       qw(
+    DEFAULT_OOZIE_MAX_JOBS
     EMPTY_STRING
+    HOURS_IN_A_DAY
     RE_AT
 );
 use App::Oozie::Types::DateTime qw( IsDateStr );
@@ -53,12 +55,12 @@ option hours => (
 );
 
 option maxjobs => (
-    is     => 'rw',
-    isa    => Int,
-    default => sub { 1_000 },
-    format => 'i',
-    short  => 'max',
-    doc    => 'Maximum number of failed tasks to check in one run (defaults to 1000)',
+    is      => 'rw',
+    isa     => Int,
+    default => sub { DEFAULT_OOZIE_MAX_JOBS },
+    format  => 'i',
+    short   => 'max',
+    doc     => 'Maximum number of failed tasks to check in one run (defaults to 1000)',
 );
 
 option resurrect_coord => (
@@ -92,7 +94,7 @@ has when => (
     default => sub {
         my $self = shift;
         $self->since ? Date::Parse::str2time $self->since
-                     : time - ( $self->hours || 24) * 3600
+                     : time - ( $self->hours || HOURS_IN_A_DAY) * ONE_HOUR
                      ;
     },
 );
@@ -170,7 +172,7 @@ sub execute_reruns {
                         join "\n",
                             grep { $_ }
                             map { chomp; $_ }
-                            @rv >= 3 ? @rv[3..$#rv] : @rv;
+                            @rv >= 3 ? @rv[3..$#rv] : @rv; ## no critic (ProhibitMagicNumbers)
                     }
                 : EMPTY_STRING
                 ;

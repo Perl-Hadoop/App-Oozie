@@ -12,9 +12,12 @@ use App::Oozie::Constants qw(
     DEFAULT_END_DATE_DAYS
     DEFAULT_START_DATE_DAY_FRAME
     EMPTY_STRING
+    INDEX_NOT_FOUND
+    MAX_RETRY
     OOZIE_STATES_RUNNING
     SHORTCUT_METHODS
     SPACE_CHAR
+    TERMINAL_LINE_LEN
 );
 use App::Oozie::Date;
 use App::Oozie::Types::DateTime qw( IsDate IsHour IsMinute );
@@ -282,7 +285,7 @@ sub _option_build_guess_wf_path {
 
     if (File::Spec->file_name_is_absolute($wf_dir)) {
         my $workflowsPartIndex = rindex($wf_dir, $local_wf_basedir);
-        if ($workflowsPartIndex != -1) {
+        if ( $workflowsPartIndex != INDEX_NOT_FOUND ) {
             $relativePath = substr $wf_dir, $workflowsPartIndex + length($local_wf_basedir);
         }
     }
@@ -794,7 +797,7 @@ DEFINE
 
     my %rv;
     foreach my $name ( @vars ) {
-        print q{-} x 80, "\n";
+        print q{-} x TERMINAL_LINE_LEN, "\n";
         print "\t$name:\t$missing{$name}\n\n";
         my $value = $self->ask( $name );
         next if ! defined $value;
@@ -878,7 +881,7 @@ sub ask {
     my $msg = "Please enter the new value for `$var` based on the definition above";
     my($input, $count);
     while ( 1 ) {
-        if ( ++$count > 3 ) {
+        if ( ++$count > MAX_RETRY ) {
             print "\tYou didn't specify anything 3 times, so I give up! ($var=undef)\n";
             last;
         }
