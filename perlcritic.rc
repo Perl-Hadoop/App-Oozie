@@ -35,7 +35,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-InputOutput::RequireCheckedClose]
 [-InputOutput::RequireCheckedSyscalls]
 [-RegularExpressions::ProhibitEnumeratedClasses]
-[-RegularExpressions::ProhibitFixedStringMatches]
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::RequireArgUnpacking]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
@@ -77,6 +76,7 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [RegularExpressions::ProhibitCaptureWithoutTest]
 [RegularExpressions::ProhibitComplexRegexes]
 [RegularExpressions::ProhibitEscapedMetacharacters]
+[RegularExpressions::ProhibitFixedStringMatches]
 [RegularExpressions::ProhibitUnusedCapture]
 
 # /xms
