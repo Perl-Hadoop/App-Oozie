@@ -25,6 +25,11 @@ use XML::Compile::Cache;
 use XML::Compile::Util;
 use XML::LibXML;
 
+use constant {
+    RE_COLON => qr{ [:] }xms,
+    RE_DOT   => qr{ [.] }xms,
+};
+
 with qw(
     App::Oozie::Role::Log
     App::Oozie::Role::Fields::Generic
@@ -263,8 +268,8 @@ sub sniff_doc {
     my $logger  = $self->logger;
     my $verbose = $self->verbose;
 
-    my $type = fileno $doc                                    ? 'IO'
-             : ( ( $doc =~ m/^\s*</s ) or is_scalarref $doc ) ? 'string'
+    my $type = fileno $doc ? 'IO'
+             : ( ( $doc =~ m{ \A \s* [<] }xms ) or is_scalarref $doc ) ? 'string'
              : 'location';
 
     my $xml  = XML::LibXML->load_xml($type => $doc);
@@ -273,7 +278,7 @@ sub sniff_doc {
     my $namespace = $root->getNamespaceURI;
 
     if ($namespace) {
-        my ($localname, $version) = (split /:/, $namespace )[-2, -1];
+        my ($localname, $version) = (split RE_COLON, $namespace )[-2, -1];
         if ($localname and $version) {
             return $localname, $version;
         }
@@ -374,11 +379,11 @@ sub _build_schema {
             next;
         }
         my $namespace = delete $attr{targetNamespace};
-        my $version   = ( split /:/, $namespace )[-1];                       # assuming uri:oozie:...:$version
-        my $prefix = ( split /:/, ( grep $attr{$_} eq $namespace, keys %attr )[0] )[-1];
+        my $version   = ( split RE_COLON, $namespace )[-1]; # assuming uri:oozie:...:$version
+        my $prefix    = ( split RE_COLON, ( grep $attr{$_} eq $namespace, keys %attr )[0] )[-1];
 
         # build a "version string" that can be asciibetically compared
-        my $v = join EMPTY_STRING, map sprintf( '%04d', $_ ), ( split( /\./, $version ), (0) x 5 )[ 0 .. 5 ];
+        my $v = join EMPTY_STRING, map sprintf( '%04d', $_ ), ( split( RE_DOT, $version ), (0) x 5 )[ 0 .. 5 ];
 
         # keep name, version and xsd file for the latest version
         if ( $v gt( $prefixes{$prefix}[2] || EMPTY_STRING ) ) {
