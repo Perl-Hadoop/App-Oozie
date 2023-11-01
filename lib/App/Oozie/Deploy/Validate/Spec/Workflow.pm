@@ -128,8 +128,8 @@ ETOOFAT
     open my $FH, '<', $file or die "Cannot open $file";
     while(my $String = <$FH>) {
         if (
-                $String =~ /(root.default)$/
-            ||  $String =~ /(root.mapred)$/
+                $String =~ m{ (root.default) \z }xms
+            ||  $String =~ m{ (root.mapred)  \z }xms
         ) {
             $logger->error(
                 "FIXME !!! queue configuration parameter in workflow.xml is set to default or mapred; you are not allowed to deploy workflows in root.mapred or root.default queue."
@@ -139,8 +139,8 @@ ETOOFAT
         }
 
         if (
-                $String =~ /(mapreduce.job.queuename)/
-            ||  $String =~ /(spark.yarn.queue)/
+                $String =~ m{ (mapreduce.job.queuename) }xms
+            ||  $String =~ m{ (spark.yarn.queue) }xms
         ) {
             $validation_queue_check++;
         }
@@ -184,7 +184,7 @@ ETOOFAT
     my @queue_array = $global_prop
                     ? (
                         map  { $_->{value} }
-                        grep { $_->{name} =~ m{queuename} }
+                        grep { $_->{name} =~ m{ queuename }xms }
                         @{ $global_prop }
                         )
                     : ()
