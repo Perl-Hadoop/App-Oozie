@@ -30,6 +30,10 @@ resume, depending on the task status
 USAGE
 ;
 
+use constant {
+    RE_AT => qr{ \@ }xms,
+}
+
 with qw(
     App::Oozie::Role::Log
     App::Oozie::Role::Fields::Common
@@ -255,14 +259,14 @@ sub collect {
 
     my %is_status = map { $_ => 1 } @{ $self->status };
     my $reruns    = {};
-    $re_name      = qr/$re_name/ if $re_name;
+    $re_name      = qr{ $re_name }xms if $re_name;
 
     for my $fail ( @candidates ) {
 
         my $name = $fail->{appName};
         my $id   = $fail->{id};
         my $cid  = $fail->{parentId}
-                    ? ( split m{ [@] }xms, $fail->{parentId} )[0]
+                    ? ( split RE_AT, $fail->{parentId} )[0]
                     : undef
                     ;
 
@@ -313,7 +317,7 @@ sub collect {
         if (   ! $reruns->{$key}
             || $last_mtime > $reruns->{ $key }{last_mtime_epoch}
         ) {
-            my $cmd = $job->{status} =~ /susp/i
+            my $cmd = $job->{status} =~ m{ susp }xmsi
                     ? '-resume'
                     : '-refresh -rerun'
                     ;
