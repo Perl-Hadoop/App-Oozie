@@ -27,7 +27,7 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-Miscellanea::ProhibitUnrestrictedNoCritic]
 [-Miscellanea::ProhibitUselessNoCritic]
 
-# =============== Temporarily Disable ================= #
+# =============== Temporarily Disabled ================ #
 
 [-BuiltinFunctions::RequireBlockGrep]
 [-BuiltinFunctions::RequireBlockMap]
