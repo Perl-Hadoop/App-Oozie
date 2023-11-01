@@ -36,8 +36,13 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 
 # Clashes with the quoted subs in type definitions.
 [-ValuesAndExpressions::RequireInterpolationOfMetachars]
+
 # not sure if we'd need this
 [-BuiltinFunctions::ProhibitBooleanGrep]
+
+# need to run tests only under `dzil test`, if this is enabled
+# as the repo versions only have the palceholder for a version.
+[-Modules::RequireVersionVar]
 
 # ===================================================== #
 # ===================== revisit ======================= #
@@ -63,10 +68,6 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
 [-Variables::ProhibitReusedNames]
-
-# need to run onyl under `dzil test`, if this is enabled
-[-Modules::RequireVersionVar]
-
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 
 # /xms
