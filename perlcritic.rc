@@ -34,7 +34,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-InputOutput::ProhibitExplicitStdin]
 [-InputOutput::RequireCheckedClose]
 [-InputOutput::RequireCheckedSyscalls]
-[-RegularExpressions::ProhibitEnumeratedClasses]
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::RequireArgUnpacking]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
@@ -160,6 +159,8 @@ allow = %ENV %INC $|
 [-NamingConventions::Capitalization]
 # keep being explicit
 [-RegularExpressions::ProhibitUselessTopic]
+# we don't want to match unicode
+[-RegularExpressions::ProhibitEnumeratedClasses]
 [-Subroutines::ProhibitUnusedPrivateSubroutines]
 [-ValuesAndExpressions::ProhibitConstantPragma]
 [-ValuesAndExpressions::ProhibitImplicitNewlines]
