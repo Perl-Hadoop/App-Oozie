@@ -8,42 +8,6 @@
 severity  = brutal
 verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 
-# =================== disable these =================== #
-
-[-BuiltinFunctions::ProhibitComplexMappings]
-# keep being explicit
-[-BuiltinFunctions::ProhibitUselessTopic]
-[-BuiltinFunctions::ProhibitStringyEval]
-[-CodeLayout::ProhibitParensWithBuiltins]
-[-CodeLayout::RequireTidyCode]
-[-ControlStructures::ProhibitPostfixControls]
-[-ControlStructures::ProhibitYadaOperator]
-[-Documentation::RequirePackageMatchesPodName]
-[-Documentation::RequirePodSections]
-[-ErrorHandling::RequireCarping]
-[-InputOutput::RequireBracedFileHandleWithPrint]
-[-Modules::ProhibitAutomaticExportation]
-[-Modules::ProhibitMultiplePackages]
-[-Modules::RequireExplicitPackage]
-[-NamingConventions::Capitalization]
-[-Subroutines::ProhibitUnusedPrivateSubroutines]
-[-ValuesAndExpressions::ProhibitConstantPragma]
-[-ValuesAndExpressions::ProhibitImplicitNewlines]
-[-ValuesAndExpressions::ProhibitLeadingZeros]
-[-ValuesAndExpressions::ProhibitLongChainsOfMethodCalls]
-[-Variables::ProhibitPunctuationVars]
-[-Variables::RequireInitializationForLocalVars]
-
-# Clashes with the quoted subs in type definitions.
-[-ValuesAndExpressions::RequireInterpolationOfMetachars]
-
-# not sure if we'd need this
-[-BuiltinFunctions::ProhibitBooleanGrep]
-
-# need to run tests only under `dzil test`, if this is enabled
-# as the repo versions only have the palceholder for a version.
-[-Modules::RequireVersionVar]
-
 # ===================================================== #
 # ===================== revisit ======================= #
 
@@ -168,6 +132,46 @@ packages = Data::Dumper File::Find FindBin Log::Log4perl Config
 
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
+
+# ===================================================== #
+# ===================================================== #
+# ===================================================== #
+
+# ============== Permanently disable these ============== #
+
+[-BuiltinFunctions::ProhibitComplexMappings]
+# keep being explicit
+[-BuiltinFunctions::ProhibitUselessTopic]
+[-BuiltinFunctions::ProhibitStringyEval]
+[-CodeLayout::ProhibitParensWithBuiltins]
+[-CodeLayout::RequireTidyCode]
+[-ControlStructures::ProhibitPostfixControls]
+[-ControlStructures::ProhibitYadaOperator]
+[-Documentation::RequirePackageMatchesPodName]
+[-Documentation::RequirePodSections]
+[-ErrorHandling::RequireCarping]
+[-InputOutput::RequireBracedFileHandleWithPrint]
+[-Modules::ProhibitAutomaticExportation]
+[-Modules::ProhibitMultiplePackages]
+[-Modules::RequireExplicitPackage]
+[-NamingConventions::Capitalization]
+[-Subroutines::ProhibitUnusedPrivateSubroutines]
+[-ValuesAndExpressions::ProhibitConstantPragma]
+[-ValuesAndExpressions::ProhibitImplicitNewlines]
+[-ValuesAndExpressions::ProhibitLeadingZeros]
+[-ValuesAndExpressions::ProhibitLongChainsOfMethodCalls]
+[-Variables::ProhibitPunctuationVars]
+[-Variables::RequireInitializationForLocalVars]
+
+# Clashes with the quoted subs in type definitions.
+[-ValuesAndExpressions::RequireInterpolationOfMetachars]
+
+# not sure if we'd need this
+[-BuiltinFunctions::ProhibitBooleanGrep]
+
+# need to run tests only under `dzil test`, if this is enabled
+# as the repo versions only have the palceholder for a version.
+[-Modules::RequireVersionVar]
 
 # ===================================================== #
 #
