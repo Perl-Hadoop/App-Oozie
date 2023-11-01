@@ -158,6 +158,8 @@ allow = %ENV %INC $|
 [-Modules::ProhibitMultiplePackages]
 [-Modules::RequireExplicitPackage]
 [-NamingConventions::Capitalization]
+# keep being explicit
+[-RegularExpressions::ProhibitUselessTopic]
 [-Subroutines::ProhibitUnusedPrivateSubroutines]
 [-ValuesAndExpressions::ProhibitConstantPragma]
 [-ValuesAndExpressions::ProhibitImplicitNewlines]
