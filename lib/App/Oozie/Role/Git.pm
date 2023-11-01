@@ -39,7 +39,7 @@ option git_repo_path => (
 
 has git_deploy_tag_pattern => (
     is      => 'rw',
-    default => sub { qr// },
+    default => sub { qr{}xms },
 );
 
 has git_tag_fetcher => (
@@ -106,7 +106,10 @@ sub get_git_info_on_all_files_in {
                                 ->in( $folder );
 
     # Note that this ideally should be kept up-to-date with lib/ttree.cfg
-    @all_files_in_folder = grep { $_ !~ /.sw[a-z]$/ } @all_files_in_folder;
+    @all_files_in_folder = grep {
+                                $_ !~ m{ .sw[a-z] \z }xms
+                            }
+                            @all_files_in_folder;
 
     $logger->info(
         sprintf 'Collecting git logs for %d files (this might take a while)',
@@ -274,7 +277,10 @@ sub verify_git_tag {
     return if not @dirty && !$gitforce;
 
     # 'M file', '?? file'
-    @dirty = map { (split m{\s+}, trim($_), 2)[1] } @dirty;
+    @dirty = map {
+                (split m{ \s+ }xms, trim($_), 2)[1]
+            }
+            @dirty;
 
     my $fail = 0;
     foreach my $dirt ( @dirty ) {
