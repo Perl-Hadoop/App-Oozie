@@ -45,7 +45,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
-[-Variables::ProhibitReusedNames]
 
 # ===================== Enable ======================== #
 
@@ -115,6 +114,7 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [Variables::ProhibitConditionalDeclarations]
 [Variables::ProhibitMatchVars]
 [Variables::ProhibitPerl4PackageNames]
+[Variables::ProhibitReusedNames]
 [Variables::ProhibitUnusedVariables]
 [Variables::RequireLexicalLoopIterators]
 

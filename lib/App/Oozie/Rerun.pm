@@ -131,7 +131,7 @@ sub execute_reruns {
     for my $idx (sort keys %{ $reruns } ) {
         my $slot = $reruns->{ $idx };
         my @cmd = (
-            my @cmd_common,
+            @cmd_common,
             split( m{ \s+ }xms, $slot->{cmd} ),
             $slot->{coord_job_id},
             '-action',

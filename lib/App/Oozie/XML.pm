@@ -368,11 +368,11 @@ sub _build_schema {
 
         # read the XSD file as XML and get the schema attributes
         my $xml = XML::LibXML->load_xml( location => $file );
-        my ($XML_SCHEMA) = $xml->findnodes('/xs:schema');
+        my ($this_xml_schema) = $xml->findnodes('/xs:schema');
         my ($first)  = $xml->findnodes('/xs:schema/xs:element');
 
         # get the namespace and version
-        my %attr      = map +( $_->name, $_->value ), $XML_SCHEMA->attributes;
+        my %attr      = map +( $_->name, $_->value ), $this_xml_schema->attributes;
         if ( ! exists $attr{targetNamespace} ) {
             # seems to be a change in new version
             next;

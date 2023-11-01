@@ -293,14 +293,14 @@ sub verify_queue_name {
     }
 
     foreach my $action_name (keys %{ $action } ) {
-        my $action = $action->{$action_name};
+        my $this_action = $action->{$action_name};
         foreach my $job_type (
-            grep { exists $action->{ $_ } }
+            grep { exists $this_action->{ $_ } }
                 @JOB_TYPES_NEEDING_QUEUE
         ) {
-            my $a_prop =  $action->{ $job_type }{configuration}
-                            && $action->{ $job_type }{configuration}{property}
-                        ? $action->{ $job_type }{configuration}{property}
+            my $a_prop =  $this_action->{ $job_type }{configuration}
+                            && $this_action->{ $job_type }{configuration}{property}
+                        ? $this_action->{ $job_type }{configuration}{property}
                         : undef
                         ;
             if (
