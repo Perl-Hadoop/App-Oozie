@@ -10,6 +10,7 @@ use parent qw( Exporter );
 our @EXPORT_OK = qw(
     remove_newline
     resolve_tmp_dir
+    trim_slashes
 );
 
 sub remove_newline {
@@ -26,6 +27,15 @@ sub resolve_tmp_dir {
     return $tmp if ! -l $tmp;
     my $real = readlink $tmp;
     return $real;
+}
+
+sub trim_slashes {
+    my $s = shift;
+    return $s if ! $s;
+    # removing  both the leading and trailing path separators
+    $s =~ s{ \A [/]    }{}xms;
+    $s =~ s{    [/] \z }{}xms;
+    return $s;
 }
 
 1;

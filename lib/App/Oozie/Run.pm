@@ -22,6 +22,7 @@ use App::Oozie::Types::Common qw( IsJobType );
 use App::Oozie::Util::Misc qw(
     remove_newline
     resolve_tmp_dir
+    trim_slashes
 );
 
 use Config::Properties;
@@ -289,12 +290,11 @@ sub _option_build_guess_wf_path {
         $relativePath = $wf_dir;
     }
 
-    if (defined($relativePath)) {
-        # removing  both the leading and trailing path separators
-        $relativePath =~ s{ \A [/]    }{}xms;
-        $relativePath =~ s{    [/] \z }{}xms;
-        my $oozie_basepath = $self->oozie_basepath;
-        $rv = File::Spec->catfile( $oozie_basepath, $relativePath);
+    if ( $relativePath ) {
+        $rv = File::Spec->catfile(
+                    $self->oozie_basepath,
+                    trim_slashes( $relativePath ),
+                );
     }
     else {
         die "Failed to guess the workflow path!";
