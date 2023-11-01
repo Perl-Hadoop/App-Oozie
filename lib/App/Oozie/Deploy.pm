@@ -161,7 +161,7 @@ has ttlib_base_dir => (
         (my $whereami = __FILE__) =~ s{ [.]pm \z }{}xms;
         my $base = File::Spec->catdir( $whereami, 'ttlib' );
         return $base if App::Oozie::Types::Common->get_type(IsDir)->check( $base );
-        die "Failed to locate the ttlib path!";
+        die 'Failed to locate the ttlib path!';
     },
 );
 
@@ -226,7 +226,7 @@ has email_validator => (
         sub {
             my $self   = shift;
             my $emails = shift || do {
-                $self->logger->warn( "No email was set!" );
+                $self->logger->warn( 'No email was set!' );
                 return;
             };
             my @splits = map s/\+.+?@/@/r, map s/^\s+|\s+$//gr, split q{,}, $emails; ## no critic (ProhibitStringySplit,RequireDotMatchAnything,RequireExtendedFormatting,RequireLineBoundaryMatching,ProhibitEscapedMetacharacters)
@@ -279,7 +279,7 @@ sub BUILD {
         # assert_valid() does not display the error message, hence the manual check
 
         my $error = $is_file->validate( $absolute_path ) || next;
-        $logger->logdie( sprintf "required_tt_files(): %s", $error );
+        $logger->logdie( sprintf 'required_tt_files(): %s', $error );
     }
 
     if ( $verbose ) {
@@ -331,7 +331,7 @@ sub run {
     $self->maybe_update_coordinators( $update_coord ) if @{ $update_coord };
 
     if ($self->prune) {
-        $logger->info( "--prune is set, checking workflow directories for old files" );
+        $logger->info( '--prune is set, checking workflow directories for old files' );
         for my $workflow ( @{ $workflows } ) {
             $self->prune_path(
                 File::Spec->catdir(
@@ -360,7 +360,7 @@ sub _verify_and_compile_all_workflows {
     my $logger    = $self->logger;
 
     if ( ! is_arrayref $workflows || ! @{ $workflows } ) {
-        $logger->logdie( "Please give one or several workflow name(s) on the command line (glob pattern accepted). Also see --help" );
+        $logger->logdie( 'Please give one or several workflow name(s) on the command line (glob pattern accepted). Also see --help' );
     }
 
     $self->pre_verification( $workflows );
@@ -384,9 +384,9 @@ sub _verify_and_compile_all_workflows {
     }
 
     if ($total_errors) {
-        $logger->fatal( "ERROR: $total_errors errors were encountered during this run. Please fix it!" );
-        $logger->fatal( "The --force option has been disabled, as not enough really paid attention." );
-        $logger->fatal( "Fixing the errors is really your best and easiest option." );
+        $logger->fatal( sprintf 'ERROR: %s errors were encountered during this run. Please fix it!', $total_errors );
+        $logger->fatal( 'The --force option has been disabled, as not enough really paid attention.' );
+        $logger->fatal( 'Fixing the errors is really your best and easiest option.' );
         $logger->logdie( 'Failed.' );
     }
 
@@ -420,7 +420,7 @@ sub __collect_internal_conf_hdfs {
 
     return {} if ! $file; # not specified at all
 
-    $logger->debug( sprintf "If exists, fetching from HDFS: %s", $file );
+    $logger->debug( sprintf 'If exists, fetching from HDFS: %s', $file );
 
     return {} if ! $self->_hdfs_exists_no_exception( $file );
 
@@ -448,7 +448,7 @@ sub __collect_internal_conf {
             if ( $verbose ) {
                 $logger->debug( sprintf 'Processing conf file %s ...', $file );
             }
-            open my $FH, '<', $file or $logger->logdie( sprintf "Failed to read %s: %s", $file, $! );
+            open my $FH, '<', $file or $logger->logdie( sprintf 'Failed to read %s: %s', $file, $! );
             $properties->load( $FH );
             if ( ! close $FH ) {
                 $logger->warn(
@@ -496,7 +496,7 @@ sub __collect_internal_conf {
     $config->{nameNode}         //= $self->template_namenode;
     $config->{has_sla}            = $self->sla;
 
-    $self->logger->info( "Upload directory: ".$self->destination_path );
+    $self->logger->info( sprintf 'Upload directory: %s', $self->destination_path );
 
     return $config;
 }
@@ -507,7 +507,7 @@ sub max_wf_xml_length {
     my $conf_val  = $ooz_admin->{'oozie.service.WorkflowAppService.WorkflowDefinitionMaxLength'};
 
     return $conf_val
-            || $self->logger->logdie( "Unable to fetch the ooozie configuration WorkflowDefinitionMaxLength!" );
+            || $self->logger->logdie( 'Unable to fetch the ooozie configuration WorkflowDefinitionMaxLength!' );
 }
 
 sub guess_running_coordinator {
@@ -593,7 +593,7 @@ sub __maybe_dump_xml_to_json {
 
     require JSON;
 
-    my $sv                    = shift || $logger->logdie( "Spec validator not specified!" );
+    my $sv                    = shift || $logger->logdie( 'Spec validator not specified!' );
     my $validation_errors_ref = shift;
     my $total_errors_ref      = shift;
 
@@ -602,7 +602,7 @@ sub __maybe_dump_xml_to_json {
 
         if ( my $error = $parsed->{error} ) {
             $logger->fatal(
-                sprintf "We can't validate %s since parsing failed: %s",
+                sprintf q{We can't validate %s since parsing failed: %s},
                             $parsed->{relative_file_name},
                             $error,
             );
@@ -611,13 +611,13 @@ sub __maybe_dump_xml_to_json {
             next; #we don't even have valid XML file at this point, so just skip it
         };
 
-        $logger->info('Dumping xml to json within ', $dump_path );
+        $logger->info( sprintf 'Dumping xml to json within %s', $dump_path );
         my $json_filename = File::Spec->catfile(
             $dump_path,
             File::Basename::basename($xml_file, '.xml') . '.json'
         );
         File::Path::make_path( $dump_path );
-        open my $JSON_FH, '>', $json_filename or $logger->logdie( sprintf "Failed to create %s: %s", $json_filename, $! );
+        open my $JSON_FH, '>', $json_filename or $logger->logdie( sprintf 'Failed to create %s: %s', $json_filename, $! );
         print $JSON_FH JSON->new->pretty->encode( $parsed->{xml_in} );
         if ( ! close $JSON_FH ) {
             $logger->warn(
@@ -638,7 +638,8 @@ sub compile_templates {
     my $total_errors_ref      = shift;
 
     if ( ! -d $workflow ) {
-        die "The workflow path $workflow either does not exist or not a directory";
+        die sprintf 'The workflow path `%s` either does not exist or not a directory',
+                    $workflow;
     }
 
     state $pass_through = [
@@ -676,10 +677,12 @@ sub compile_templates {
 
 sub process_templates {
     my $self = shift;
-    my $workflow = shift || die "No workflow path specified!";
+    my $workflow = shift || die 'No workflow path specified!';
 
     if ( ! -d $workflow ) {
-        die "The workflow path $workflow either does not exist or not a directory";
+        die sprintf 'The workflow path %s either does not exist or not a directory',
+                    $workflow,
+        ;
     }
 
     my($validation_errors, $total_errors);
@@ -714,10 +717,10 @@ sub process_templates {
     $self->create_deployment_meta_file( $dest, $workflow, $total_errors );
 
     if ( $validation_errors ) {
-        $self->logger->error( "Oozie deployment validation status: !!!!! FAILED !!!!!" );
+        $self->logger->error( 'Oozie deployment validation status: !!!!! FAILED !!!!!' );
     }
     else {
-        $self->logger->info( "Oozie deployment validation status: OK" );
+        $self->logger->info( 'Oozie deployment validation status: OK' );
     }
 
     return $validation_errors, $total_errors, $dest, $cvc;
@@ -751,7 +754,7 @@ sub verify_temp_dir {
     my $remove;
 
     if ( ! -d $user_setting ) {
-        $logger->warn( sprintf "You have TMPDIR=%s but it doesn't exist! I will ignore/remove that setting!", $user_setting );
+        $logger->warn( sprintf q{You have TMPDIR=%s but it doesn't exist! I will ignore/remove that setting!}, $user_setting );
         $remove = 1;
     }
     else {
@@ -761,7 +764,7 @@ sub verify_temp_dir {
 
         if ( ! $group_read || ! $other_read ) {
             $logger->warn(
-                sprintf "You have TMPDIR=%s and it is not group/other readable (mode=%04o)! I will ignore/remove that setting!",
+                sprintf q{You have TMPDIR=%s and it is not group/other readable (mode=%04o)! I will ignore/remove that setting!},
                              $user_setting,
                              S_IMODE( $mode ),
             );
@@ -776,14 +779,14 @@ sub verify_temp_dir {
 
 sub collect_names_to_deploy {
     my $self  = shift;
-    my $names = shift || die "No workflow names were specified!";
+    my $names = shift || die 'No workflow names were specified!';
 
     my $owf_base = $self->oozie_workflows_base;
     my $logger   = $self->logger;
     my $verbose  = $self->verbose;
 
     if ( ! is_arrayref $names ) {
-        die "Workflow names need to be specified as an arrayref";
+        die 'Workflow names need to be specified as an arrayref';
     }
 
     my(@firstLevelMatchingPatterns, @secondLevelMatchingPatterns);
@@ -854,15 +857,14 @@ MSG
 
     for my $i ( 0..$#firstLevelWorkflows ) {
         my $workflowFileLocationGuess = File::Spec->rel2abs(
-                                            $firstLevelWorkflows[$i]."/workflow.xml"
+                                            $firstLevelWorkflows[$i].'/workflow.xml'
                                         );
-        my $bundleFileLocationGuess = File::Spec->rel2abs($firstLevelWorkflows[$i]."/bundle.xml");
+        my $bundleFileLocationGuess = File::Spec->rel2abs($firstLevelWorkflows[$i].'/bundle.xml');
 
         if (! -f $workflowFileLocationGuess) {
-            $logger->info(
-                "Doesn't look like there's a workflow at $firstLevelWorkflows[$i]. ",
-                "I will process its subfolders, if any, instead."
-            );
+            my $msg = q{It doesn't look like there's a workflow at `%s`. }
+                    . q{I will process its subfolders, if any, instead.};
+            $logger->info( sprintf $msg, $firstLevelWorkflows[$i] );
             my @subs = File::Find::Rule->directory
                                  ->maxdepth(1)
                                  ->mindepth(1)
@@ -870,7 +872,10 @@ MSG
                              ;
             if (@subs) {
                 for my $subx ( @subs ) {
-                    $logger->debug( "Will additionally look for workflows in the following sub folder: $subx" );
+                    $logger->debug(
+                        sprintf 'I will additionally look for workflows in the following sub folder: %s',
+                                $subx,
+                    );
                 }
             }
 
@@ -881,9 +886,8 @@ MSG
               splice @firstLevelWorkflows, $i, 1;
               $i--;
             }
-            else
-            {
-                $self->logger->debug("We have identified this a a bundle.");
+            else {
+                $self->logger->debug( 'We have identified this a a bundle.' );
             }
         }
     }
@@ -1021,8 +1025,8 @@ sub collect_data_for_deployment_meta_file {
 
 sub create_deployment_meta_file {
     my $self         = shift;
-    my $path         = shift || die "No path was specified!";
-    my $workflow     = shift || die "No workflow was specified!";
+    my $path         = shift || die 'No path was specified!';
+    my $workflow     = shift || die 'No workflow was specified!';
     my $total_errors = shift;
 
     my $meta = $self->collect_data_for_deployment_meta_file( $workflow, $total_errors  );
@@ -1075,7 +1079,7 @@ sub write_deployment_meta_file {
 
 sub prune_path {
     my $self          = shift;
-    my $path          = shift || die "No path was specified";
+    my $path          = shift || die 'No path was specified';
     my $files         = $self->hdfs->list($path);
     my $total_files   = scalar @{ $files };
     my $deleted_files = 0;
@@ -1088,7 +1092,7 @@ sub prune_path {
         if (   $file->{type} eq 'FILE'
             && $file->{modificationTime} / MILISEC_DIV < $deploy_start
         ) {
-            my $msg = sprintf "old file found in destination: %s (mtime %s) -> %s",
+            my $msg = sprintf 'Old file found in destination: %s (mtime %s) -> %s',
                                 $file->{pathSuffix},
                                 $self->date->epoch_yyyy_mm_dd_hh_mm_ss(
                                     int( $file->{modificationTime} / MILISEC_DIV )
@@ -1102,7 +1106,7 @@ sub prune_path {
 
         # check directories regardless of age
         if( $file->{type} eq 'DIRECTORY' ) {
-            my $msg = sprintf "Directory found in destination: %s (mtime %s) -> checking contents",
+            my $msg = sprintf 'Directory found in destination: %s (mtime %s) -> checking contents',
                             $file->{pathSuffix},
                             $self->date->epoch_yyyy_mm_dd_hh_mm_ss(
                                 int( $file->{modificationTime} / MILISEC_DIV )
@@ -1132,7 +1136,7 @@ sub upload_to_hdfs {
 
     if ( $self->dryrun ) {
         $self->logger->warn(
-            sprintf "Skipping upload to HDFS as dryrun was set. Would have uploaded from %s to %s",
+            sprintf 'Skipping upload to HDFS as dryrun was set. Would have uploaded from %s to %s',
                                 $config->{base_dest},
                                 $config->{hdfs_dest},
         );
@@ -1157,7 +1161,7 @@ sub _hdfs_exists_no_exception {
         my $eval_error = $@ || 'Zombie error';
         if ( $self->verbose ) {
             $self->logger->debug(
-                sprintf "WebHDFS exists() failed with exception, however since this is a silent call, it is ignored: %s",
+                sprintf 'WebHDFS exists() failed with exception, however since this is a silent call, it is ignored: %s',
                             $eval_error,
             )
         }
@@ -1176,7 +1180,7 @@ sub _copy_to_hdfs_with_webhdfs {
     my $verbose      = $self->verbose;
 
     $logger->info(
-        sprintf "copying from `%s` to `%s`",
+        sprintf 'copying from `%s` to `%s`',
                     $sourceFolder,
                     $destFolder,
     );
@@ -1213,7 +1217,7 @@ sub _copy_to_hdfs_with_webhdfs {
         if ( $hdfs->exists($destFolder) ) {
             if ( $verbose ) {
                 $logger->debug(
-                    sprintf "HDFS destination %s exists",
+                    sprintf 'HDFS destination %s exists',
                                 $destFolder,
                 );
             }
@@ -1241,7 +1245,12 @@ sub _copy_to_hdfs_with_webhdfs {
             $logger->debug("Creating $dest");
         }
         $hdfs->touchz( $dest );
-        if ( ! $hdfs->create($dest, $data, overwrite => "true") ) {
+        if ( ! $hdfs->create(
+                    $dest,
+                    $data,
+                    overwrite => 'true',
+                )
+        ) {
             $logger->logdie(
                 sprintf 'Failed to create %s through WebHDFS',
                         $dest

@@ -55,7 +55,7 @@ has effective_username => (
     is      => 'ro',
     default => sub {
         (getpwuid $<)[0]
-            || die "Unable to locate the effective user name";
+            || die 'Unable to locate the effective user name';
     },
 );
 

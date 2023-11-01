@@ -148,7 +148,7 @@ sub get_job_conf {
             );
         }
         $val =~ s{ [^\\][#] .* \z }{}xms;
-        $job_conf{ "JOBCONF_" . $key } = trim $val;
+        $job_conf{ 'JOBCONF_' . $key } = trim $val;
     }
 
     return %job_conf;
@@ -171,7 +171,7 @@ sub compile {
     my $deploy_temp_lib_dir = File::Spec->catfile( $dest, $self->ttlib_dynamic_base_dir_name );
 
     $logger->info(
-        sprintf "Processing `%s` with the application name `%s` into `%s`",
+        sprintf 'Processing `%s` with the application name `%s` into `%s`',
                     $workflow,
                     $appname,
                     $dest,
@@ -210,7 +210,7 @@ sub compile {
         if ( !defined $config->{$prop} ) {
             $logger->warn( "Conf error: $prop has no value defined!" )
                 if $prop ne
-                "has_sla";    # dmorel 2015-03-09: skip the error for the sla key (change later?)
+                'has_sla';    # dmorel 2015-03-09: skip the error for the sla key (change later?)
             next;
         }
         push @command,
@@ -367,10 +367,14 @@ sub _probe_readme {
 
     if ( ! $has_readme ) {
         $logger->error(
-            "A README file is missing in workflow folder $workflow. ",
-            "This file must be present and it must contain a short explanation of what the workflow is for. ",
-            sprintf( "Please add a file named %s and try redeploying the workflow.",
-                        join( q{ or }, @{ $self->possible_readme_file_names } ),
+            sprintf(
+                'A README file is missing in workflow folder %s. ',
+                    $workflow,
+            ),
+            'This file must be present and it must contain a short explanation of what the workflow is for. ',
+            sprintf(
+                'Please add a file named %s and try redeploying the workflow.',
+                    join( q{ or }, @{ $self->possible_readme_file_names } ),
             ),
         );
         ${ $validation_errors_ref }++;
@@ -396,18 +400,18 @@ sub _create_meta_includes {
         return;
     }
 
-    die "Options need to be a hashref!" if ! $opt || ! is_hashref $opt;
+    die 'Options need to be a hashref!' if ! $opt || ! is_hashref $opt;
 
     my $source_dir = $opt->{source_dir};
     my $meta_file  = $opt->{source_file};
     my $dest_dir   = $opt->{dest_dir};
 
     if ( ! -d $source_dir ) {
-        die "source_dir=$source_dir is not a directory!";
+        die sprintf 'source_dir=%s is not a directory!', $source_dir;
     }
 
     if ( ! -d $dest_dir ) {
-        die "dest_dir=$dest_dir is not a directory!";
+        die sprintf 'dest_dir=%s is not a directory!', $dest_dir;
     }
 
     $logger->info(
@@ -542,7 +546,7 @@ sub _pre_process_ttconfig_into_tempfile {
         my $config_line = shift || return;
         if ( $config_line =~ m{ \A copy }xms ) {
             $logger->info(
-                sprintf "Files matching this pattern will be copied as-is: /%s/",
+                sprintf 'Files matching this pattern will be copied as-is: /%s/',
                             trim +(split m{ [=] }xms, $config_line, 2)[LAST_ELEM]
             );
         }

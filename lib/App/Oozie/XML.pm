@@ -192,15 +192,23 @@ sub _probe_parse_error_for_workflow {
 
     if ( defined $sla_version && $sla_version < MIN_OOZIE_SLA_VERSION ) {
         push @extra_error,
-            "Schema version mismatch for the SLA feature!",
-            "Your sla definition refers to a schema older than the minimum required version of 0.2 (you have defined $sla_version).",
+            'Schema version mismatch for the SLA feature!',
+            sprintf(
+                'Your sla definition refers to a schema older than the minimum required version of %s (you have defined %s).',
+                    MIN_OOZIE_SLA_VERSION,
+                    $sla_version,
+            ),
         ;
     }
 
     if ( defined $wf_version && $wf_version < MIN_OOZIE_SCHEMA_VERSION_FOR_SLA ) {
         push @extra_error,
-            "Schema version mismatch for the SLA feature!",
-            "Your workflow definition refers to a schema older than the minimum required version of 0.5 (you have defined $wf_version).",
+            'Schema version mismatch for the SLA feature!',
+            sprintf(
+                'Your workflow definition refers to a schema older than the minimum required version of %s (you have defined %s).',
+                    MIN_OOZIE_SCHEMA_VERSION_FOR_SLA,
+                    $wf_version,
+            ),
         ;
     }
 
@@ -293,11 +301,17 @@ sub sniff_doc {
             return $localname, $version;
         }
         else {
-            $logger->logdie("Can't parse out localname and version from namespace: ".$namespace)
+            $logger->logdie(
+                sprintf q{Can't parse out localname and version from namespace: %s},
+                        $namespace,
+            )
         }
     }
     else {
-        $logger->logdie("Can't get namespace URI from xml document: ".trim($doc));
+        $logger->logdie(
+            sprintf q{Can't get namespace URI from xml document: %s},
+                    trim( $doc ),
+        );
     }
 
     return;
@@ -359,12 +373,12 @@ sub _build_schema {
         }
 
         @xsd = glob "${tempdir}/*.xsd"
-                    or die sprintf "Failed to locate xsd files inside %s",
+                    or die sprintf 'Failed to locate xsd files inside %s',
                                         $oozie_client_jar;
         1;
     } or do {
         my $eval_error = $@ || 'Zombie error';
-        my $msg = sprintf "Error collecting Oozie schemas. Ensure oozie-client is installed and the specs exist under %s: %s",
+        my $msg = sprintf 'Error collecting Oozie schemas. Ensure oozie-client is installed and the specs exist under %s: %s',
                             $oozie_client_jar,
                             $eval_error,
                     ;

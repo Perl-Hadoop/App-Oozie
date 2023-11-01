@@ -132,7 +132,7 @@ ETOOFAT
             ||  $String =~ m{ (root.mapred)  \z }xms
         ) {
             $logger->error(
-                "FIXME !!! queue configuration parameter in workflow.xml is set to default or mapred; you are not allowed to deploy workflows in root.mapred or root.default queue."
+                'FIXME !!! queue configuration parameter in workflow.xml is set to default or mapred; you are not allowed to deploy workflows in root.mapred or root.default queue.'
             );
             $validation_errors++;
             $total_errors++;
@@ -155,7 +155,7 @@ ETOOFAT
     # ====================================================================== #
 
     if ( !$validation_queue_check ) {
-        $logger->error( "FIXME !!! queue configuration parameter in workflow.xml is not mentioned..Please set queue parameter either using --conf spark.yarn.queue or mapreduce.job.queuename. you are not allowed to deploy workflows in root.mapred or root.default queue." );
+        $logger->error( 'FIXME !!! queue configuration parameter in workflow.xml is not mentioned..Please set queue parameter either using --conf spark.yarn.queue or mapreduce.job.queuename. you are not allowed to deploy workflows in root.mapred or root.default queue.' );
         $validation_errors++;
         $total_errors++;
     }
@@ -172,15 +172,18 @@ ETOOFAT
                     : undef
                     ;
 
-    $logger->info( "XML key validation for $file" );
+    $logger->info( sprintf 'XML key validation for %s', $file );
 
     # check some values in the XML files
     # in workflow.xml, check errorEmailTo, various params, and display a warning
 
+
+    my $error_email_field_name = 'errorEmailTo';
+
     my @contact_mail = $prop
                         ? (
                             map  { $_->{value} }
-                            grep { $_->{name} eq 'errorEmailTo' }
+                            grep { $_->{name} eq $error_email_field_name }
                             @{ $prop }
                             )
                         : ()
@@ -212,7 +215,7 @@ ETOOFAT
     foreach my $queue_value (@queue_array) {
         if ( $queue_value =~ 'default' || $queue_value =~ 'mapred' ) {
             $logger->error(
-                "FIXME !!! mapreduce.job.queuename parameter in workflow.xml is set to default or mapred; you are not allowed to deploy workflows in root.mapred or root.default queue"
+                'FIXME !!! mapreduce.job.queuename parameter in workflow.xml is set to default or mapred; you are not allowed to deploy workflows in root.mapred or root.default queue.'
             );
             $validation_errors++;
             $total_errors++;
@@ -221,7 +224,8 @@ ETOOFAT
 
     if ( ! @contact_mail ) {
         $logger->warn(
-            "FIXME !!! no errorEmailTo parameter in workflow.xml; you will not get error emails"
+            sprintf 'FIXME !!! no `%s` parameter in workflow.xml; you will not get error emails',
+                        $error_email_field_name,
         );
         $validation_errors++;
         $total_errors++;
@@ -229,7 +233,11 @@ ETOOFAT
     else {
         my $validator = $self->email_validator;
         if ( ! $validator->( $self, @contact_mail ) ) {
-            $logger->warn( sprintf "errorEmailTo=`%s` is invalid", @contact_mail );
+            $logger->warn(
+                sprintf '%s=`%s` is invalid',
+                        $error_email_field_name,
+                        @contact_mail
+            );
             $validation_errors++;
             $total_errors++;
         }

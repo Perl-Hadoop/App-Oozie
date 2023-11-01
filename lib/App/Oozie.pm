@@ -35,7 +35,7 @@ sub run {
     my $action_to_class = find_plugins('App::Oozie::Action');
 
     if ( $debug ) {
-        $logger->debug( sprintf "Found: %s", $_ )
+        $logger->debug( sprintf 'Found: %s', $_ )
             for sort keys %{ $action_to_class };
     }
 
@@ -73,7 +73,7 @@ sub run {
                     [  \@cmd ],
                     [qw( cmd )]
                 )->Indent( 0 );
-        $logger->debug( sprintf "Executing: %s", $d->Dump );
+        $logger->debug( sprintf 'Executing: %s', $d->Dump );
     }
 
     exec @cmd;

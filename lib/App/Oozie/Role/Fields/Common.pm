@@ -36,7 +36,7 @@ option username => (
     isa     => IsUserName,
     short   => 'user',
     format  => 's',
-    doc     => "User name under which the job should be submitted. Not set by default and commands will be executed as the effective user",
+    doc     => 'User name under which the job should be submitted. Not set by default and commands will be executed as the effective user',
 );
 
 has execute_as_someone_else => (

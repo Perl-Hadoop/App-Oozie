@@ -114,7 +114,7 @@ sub run {
         push @{ $command }, '-dryrun' if $self->dryrun;
 
         $logger->info(
-            sprintf "Updating the coordinator (%s) attempt: %s",
+            sprintf 'Updating the coordinator (%s) attempt: %s',
                         $self->coord,
                         $try,
         );
@@ -140,7 +140,7 @@ sub run {
             }
             else {
                 $logger->warn(
-                    sprintf "Coordinator %s update failed (%s): %s",
+                    sprintf 'Coordinator %s update failed (%s): %s',
                                 $self->coord,
                                 $self->dryrun ? ' (dryrun)' : EMPTY_STRING,
                                 $out // '[no output]',
@@ -150,7 +150,7 @@ sub run {
         }
 
         $logger->info(
-            sprintf "Coordinator %s updated%s",
+            sprintf 'Coordinator %s updated%s',
                         $self->coord,
                         $self->dryrun ? ' (dryrun)' : EMPTY_STRING,
         );
@@ -160,7 +160,7 @@ sub run {
 
     if ( ! $success ) {
         $logger->fatal(
-            sprintf "Coordinator %s was NOT updated%s.",
+            sprintf 'Coordinator %s was NOT updated%s.',
                         $self->coord,
                         $self->dryrun ? ' (dryrun)' : EMPTY_STRING,
         );
@@ -194,13 +194,13 @@ sub collect_current_conf {
 
     eval {
         my $oozie           = $self->oozie;
-        my $job             = $oozie->job( $coord ) || die "No configuration for the job: $coord";
-        $oozie_build        = $oozie->new->build_version  || die "Failed to get the Oozie server version!";
+        my $job             = $oozie->job( $coord )       || die sprintf 'No configuration for the job: %s', $coord;
+        $oozie_build        = $oozie->new->build_version  || die 'Failed to get the Oozie server version!';
         my @vtuple          = split m{ \Q-cdh\E }xms, $oozie_build;
-        $oozie_version      = shift @vtuple               || die "Unable to determine the Oozie server version from $oozie_build";
-        $oozie_cdh_version  = shift @vtuple               || die "Unable to determine the Oozie server CDH version from $oozie_build";
-        $current_coord_user = $job->{user}                || die "Failed to locate the user running $coord";
-        $current_xml        = $job->{conf}                || die "No configuration for the job: $coord";
+        $oozie_version      = shift @vtuple               || die sprintf 'Unable to determine the Oozie server version from %s', $oozie_build;
+        $oozie_cdh_version  = shift @vtuple               || die sprintf 'Unable to determine the Oozie server CDH version from %s', $oozie_build;
+        $current_coord_user = $job->{user}                || die sprintf 'Failed to locate the user running %s', $coord;
+        $current_xml        = $job->{conf}                || die sprintf 'No configuration for the job: %s', $coord;
         # If you extend the coordinator, then this data gets updated but the
         # XML config will retain the old and meaningless record. While
         # it should be fine for the startTime, it will be bogus for the endTime
@@ -209,9 +209,9 @@ sub collect_current_conf {
         # to update everything but the scheduling. For some reason XML conf
         # does not get updated.
         #
-        $meta_startTime     = $job->{startTime}           || die "No startTime set for the job: $coord";
-        $meta_endTime       = $job->{endTime}             || die "No endTime set for the job: $coord";
-        my $path            = $job->{coordJobPath}        || die "No coordJobPath defined for the job: $coord"; # shouldn't happen
+        $meta_startTime     = $job->{startTime}           || die sprintf 'No startTime set for the job: %s', $coord;
+        $meta_endTime       = $job->{endTime}             || die sprintf 'No endTime set for the job: %s', $coord;
+        my $path            = $job->{coordJobPath}        || die sprintf 'No coordJobPath defined for the job: %s', $coord; # shouldn't happen
         my $hdfs_dest       = $self->default_hdfs_destination;
         ($base_path         = $path) =~ s{ \A $hdfs_dest [/]? }{}xms;
         my $jp_hdfs_path    = catfile $path,      'job.properties';
@@ -225,7 +225,7 @@ sub collect_current_conf {
         }
         elsif ( -e $jp_local_path ) {
             $logger->info( sprintf 'job.properties exists on local file system. Fetching %s', $jp_local_path );
-            open my $FH, '<', $jp_local_path or die "Can't read $jp_local_path: $!";
+            open my $FH, '<', $jp_local_path or die sprintf q{Can't read %s: %s}, $jp_local_path, $!;
             $jp =  do { local $/; <$FH> };
             if ( ! close $FH ) {
                 $logger->warn(
@@ -272,7 +272,7 @@ FYI
     } or do {
         my $eval_error = $@ || 'Zombie error';
         $logger->fatal(
-            sprintf "Could not get config for job %s: %s",
+            sprintf 'Could not get config for job %s: %s',
                         $coord,
                         $eval_error,
         );
@@ -280,9 +280,9 @@ FYI
     };
 
     if ( $self->verbose ) {
-        $logger->debug( "Start Current XML configuration");
+        $logger->debug( 'Start Current XML configuration' );
         $logger->debug( $current_xml );
-        $logger->debug( "End Current XML configuration");
+        $logger->debug( 'End Current XML configuration' );
     }
 
     my $show_cmd_output;
@@ -290,7 +290,7 @@ FYI
         && $self->effective_username ne $current_coord_user
     ) {
         $logger->warn(
-            sprintf "Current user `%s` is not the same as the coordinator user: `%s`. Will attempt to impersonate",
+            sprintf 'Current user `%s` is not the same as the coordinator user: `%s`. Will attempt to impersonate.',
                         $self->effective_username,
                         $current_coord_user,
         );
@@ -334,7 +334,7 @@ sub _modify_xml {
         if $self->verbose;
 
     my $twig = XML::Twig->new->parse( ${ $current_xml_ref } )
-                or die "Could not parse the original configuration";
+                or die 'Could not parse the original configuration';
 
     # clean up former mistakes...
     for my $elem ( $twig->root->children ) {
@@ -491,22 +491,22 @@ sub _show_twig {
     my $twig   = shift;
     my $logger = $self->logger;
 
-    $logger->debug( "Start new XML configuration" );
+    $logger->debug( 'Start new XML configuration' );
 
     open my $BUF, '>', \my $dump
-        or die "Failed to create an in-memory filehandle: $!";
+        or die sprintf 'Failed to create an in-memory filehandle: %s', $!;
 
     $twig->flush( $BUF );
 
     if ( ! close $BUF ) {
         $logger->warn(
-            sprintf 'Failed to close in-memory XML twig: %s',,
+            sprintf 'Failed to close in-memory XML file: %s',
                         $!,
         );
     }
 
     $logger->debug( $dump );
-    $logger->debug( "End new XML configuration" );
+    $logger->debug( 'End new XML configuration' );
 
     return;
 }

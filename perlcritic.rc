@@ -34,7 +34,6 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [-InputOutput::ProhibitExplicitStdin]
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::RequireArgUnpacking]
-[-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
 
 # ===================== Enable ======================== #
@@ -97,6 +96,7 @@ verbose  = [%p] %m at line %l, column %c. (Severity: %s) - %f - %r\n
 [ValuesAndExpressions::ProhibitComplexVersion]
 [ValuesAndExpressions::ProhibitEmptyQuotes]
 [ValuesAndExpressions::ProhibitEscapedCharacters]
+[ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [ValuesAndExpressions::ProhibitMagicNumbers]
 [ValuesAndExpressions::ProhibitMismatchedOperators]
 [ValuesAndExpressions::ProhibitNoisyQuotes]

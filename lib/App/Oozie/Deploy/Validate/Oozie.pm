@@ -32,7 +32,7 @@ has oozie_uri => (
 
 sub validate {
     my $self = shift;
-    my $oozie_xmlfile = shift || die "No xml specified!";
+    my $oozie_xmlfile = shift || die 'No xml specified!';
 
     if ( ! -e $oozie_xmlfile ) {
         die "Not a file: $oozie_xmlfile";
@@ -40,10 +40,13 @@ sub validate {
 
     my($validation_errors, $total_errors);
 
-    my $command;
-    $self->logger->info( "Oozie validate for $oozie_xmlfile" );
+    $self->logger->info(
+        sprintf 'Oozie validate for %s',
+                $oozie_xmlfile,
+    );
+
     my $oozie_uri = $self->oozie_uri;
-    $command = [
+    my $command   = [
         $self->oozie_cli,
         validate => $oozie_xmlfile,
     ];

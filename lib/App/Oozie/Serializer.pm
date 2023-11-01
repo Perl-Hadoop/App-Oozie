@@ -53,7 +53,7 @@ sub BUILD {
 
     if ( ! $s ) {
         my $default = 'dummy';
-        warn sprintf "%s is an unknown serializer, falling back to %s",
+        warn sprintf '%s is an unknown serializer, falling back to %s',
                         $args->{format},
                         $default,
         ;
@@ -63,7 +63,7 @@ sub BUILD {
 
     if ( ! $s ) {
         # Shouldn't happen, apart from a possible future code change
-        die "Failed to locate a serializer!";
+        die 'Failed to locate a serializer!';
     }
 
     $self->_set___object( load_plugin( $s )->new );
@@ -73,9 +73,9 @@ sub BUILD {
 
 sub encode {
     my $self = shift;
-    my $data = shift || die "Nothing to encode!";
+    my $data = shift || die 'Nothing to encode!';
 
-    die "The data to encode needs to be a reference" if ! ref $data;
+    die 'The data to encode needs to be a reference' if ! ref $data;
 
     $self->_assert_type( $data ) if $self->enforce_type;
 
@@ -84,15 +84,15 @@ sub encode {
 
 sub decode {
     my $self = shift;
-    my $data = shift || die "Nothing to decode!";
+    my $data = shift || die 'Nothing to decode!';
 
-    die "The data to decode can't be a reference!" if ref $data;
+    die q{The data to decode can't be a reference!} if ref $data;
 
     my $is_file = $self->slurp && $data !~ m{ \n }xms && -e $data && -f _;
 
     my $rv = $self->__object->decode(
           $is_file            ? do { local(@ARGV, $/) = $data; <> }
-        : $data eq 'meta.yml' ? die "Only a file name (which does not exist) passed as meta data"
+        : $data eq 'meta.yml' ? die 'Only a file name (which does not exist) passed as meta data'
                  : $data
     );
 
@@ -107,7 +107,7 @@ sub decode {
 
 sub _assert_type {
     my $self  = shift;
-    my $input = shift || die "No data specified to enforce a type!";
+    my $input = shift || die 'No data specified to enforce a type!';
     my $type  = $self->enforce_type || return;
 
     my $failed   = $type->validate_explain( $input, 'USER_INPUT' ) || return;

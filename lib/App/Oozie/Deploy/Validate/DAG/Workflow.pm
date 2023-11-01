@@ -70,7 +70,7 @@ sub assert {
     my @errors = $self->validate( $file );
 
     if ( @errors ) {
-        $self->logger->fatal( "Some errors were encountered." );
+        $self->logger->fatal( 'Some errors were encountered.' );
         for my $error (@errors) {
             $self->logger->fatal( $error->[0] );
             $self->logger->fatal( $error->[1] );
@@ -85,13 +85,15 @@ sub assert {
 
 sub validate {
     my $self = shift;
-    my $file = shift || die "No file was specified!";
+    my $file = shift || die 'No file was specified!';
 
     state $is_end_or_kill = { map { $_ => 1 } qw( end kill ) };
 
     $self->logger->info( "DAG validation for $file" );
 
-    die "File $file does not exist" if ! -e $file;
+    if ( ! -e $file ) {
+        die sprintf 'File %s does not exist', $file;
+    }
 
     my $xml  = XML::LibXML->load_xml( location => $file );
     my $root = $xml->getDocumentElement;
@@ -106,8 +108,12 @@ sub validate {
             if ( !$all_vertices->{$to} ) {
                 push @errors,
                     [
-                    "vertex $v has an edge to $to, which doesn't exist",
-                    "nodes cannot reference nodes that do not exist in the workflow"
+                        sprintf(
+                            q{vertex `%s` has an edge to `%s`, which doesn't exist},
+                                $v,
+                                $to,
+                        ),
+                        'nodes cannot reference nodes that do not exist in the workflow',
                     ];
                 next;
             }
@@ -115,36 +121,42 @@ sub validate {
         }
     }
 
-    if ( !$g->is_dag ) {
+    if ( ! $g->is_dag ) {
         push @errors,
             [
-            "graph is not a DAG",
-            "an oozie workflow should always be a directed acyclic graph; why this one isn't can probably be found in the next errors"
+                'graph is not a DAG',
+                q{an oozie workflow should always be a directed acyclic graph; why this one isn't can probably be found in the next errors},
             ];
     }
 
     if ( my @cycle = $g->find_a_cycle ) {
         push @errors,
             [
-            "at least one cycle found: " . join( ' -> ', @cycle ),
-            "since an oozie workflow is a DAG, there should be no cycles (loops)"
+                sprintf(
+                    'at least one cycle found: %s',
+                        join( ' -> ', @cycle )
+                ),
+                'since an oozie workflow is a DAG, there should be no cycles (loops)'
             ];
         }
 
     if ( !$g->is_weakly_connected ) {
         push @errors,
             [
-            "graph is not fully connected",
-            "no node should be on its own; all nodes should descend from the 'start' or one of its descendents"
+                'graph is not fully connected',
+                q{no node should be on its own; all nodes should descend from the 'start' or one of its descendents},
             ];
     }
 
     for ( $g->source_vertices ) {
-        next if "$_" eq "start";
+        next if "$_" eq 'start';
         push @errors,
             [
-            "extra source vertex found: \"$_\"",
-            "means that this node pretends to have no ancestor; all nodes should descend at least from 'start'"
+                sprintf(
+                    q{extra source vertex found: "%s"},
+                    $_,
+                ),
+                q{means that this node pretends to have no ancestor; all nodes should descend at least from 'start'},
             ];
     }
 
@@ -155,8 +167,11 @@ sub validate {
         next if $type && $is_end_or_kill->{ $type };
         push @errors,
             [
-                "extra successorless vertex found: \"$e\"",
-                "means that this node pretends to have no descendent; all nodes should at least be ancestors of 'end' or 'kill'"
+                sprintf(
+                    'extra successorless vertex found: "%s"',
+                    $e,
+                ),
+                q{means that this node pretends to have no descendent; all nodes should at least be ancestors of 'end' or 'kill'},
             ];
     }
 
@@ -167,12 +182,11 @@ sub validate {
         push @errors,
             [
                 sprintf(
-                    "out of %s vertices, only %s are reachable",
+                    'out of %s vertices, only %s are reachable',
                         $available_total,
                         $reachable_total,
                 ),
-                "means that not all nodes are reachable from the 'start' node",
-
+                q{means that not all nodes are reachable from the 'start' node},
             ];
     }
 
@@ -242,10 +256,10 @@ sub _descend {
         $nn = @node_to ? undef : $node->localname;
     }
 
-    my $vname = $processor->{vname} || $node->getAttribute("name");
+    my $vname = $processor->{vname} || $node->getAttribute( 'name' );
 
     if ( $self->_vertex_lookup->{ $vname }++ > 1 ) {
-        Carp::confess "Vertex already created by that name: $vname";
+        Carp::confess sprintf 'Vertex already created by that name: %s', $vname;
     }
 
     $all_vertices->{ $vname }
@@ -267,15 +281,15 @@ sub _descend {
 
 sub dump_graph {
     my $self = shift;
-    my $type = shift || die "No type was defined!";
-    my $sub  = $self->can('_dump_' . $type ) || die "$type is not a valid type";
+    my $type = shift || die 'No type was defined!';
+    my $sub  = $self->can('_dump_' . $type ) || die sprintf '%s is not a valid type', $type;
     return $self->$sub();
 }
 
 sub _dump_perl {
     my $self      = shift;
-    my $g         = $self->current_graph || die "current_graph is not set!";
-    my $all_nodes = $self->current_nodes || die "current_nodes is not set";
+    my $g         = $self->current_graph || die 'current_graph is not set!';
+    my $all_nodes = $self->current_nodes || die 'current_nodes is not set!';
 
     my $debug = {
         nodes => $all_nodes,

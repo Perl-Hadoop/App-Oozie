@@ -103,7 +103,7 @@ has when => (
 sub BUILD {
     my ($self, $args) = @_;
     if ( exists $args->{hours} && exists $args->{since} ) {
-        die "--hours and --since are mutually exclusive";
+        die '--hours and --since are mutually exclusive';
     }
 }
 
@@ -111,7 +111,7 @@ sub run {
     my $self   = shift;
     my $logger = $self->logger;
     my $reruns = $self->collect || do {
-        $logger->info( "No failed jobs matching your conditions" );
+        $logger->info( 'No failed jobs matching your conditions' );
         return;
     };
 
@@ -143,7 +143,7 @@ sub execute_reruns {
             $slot->{action_number},
         );
         $logger->info(
-            sprintf "Rerunning %s action #%s: nominal time: %s last modified: %s",
+            sprintf 'Rerunning %s action #%s: nominal time: %s last modified: %s',
                         @{ $slot }{qw/
                             name
                             action_number

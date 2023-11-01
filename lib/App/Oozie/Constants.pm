@@ -46,6 +46,7 @@ use constant {
     DEFAULT_WEBHDFS_PORT                    => 14_000,
     EMPTY_STRING                            => q{},
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES => 2,
+    FORMAT_ZULU_TIME                        => '%sT%02d:%02dZ',
     HOURS_IN_A_DAY                          => 24,
     INDEX_NOT_FOUND                         => -1,
     LAST_ELEM                               => -1,
@@ -109,6 +110,7 @@ our @EXPORT_OK = qw(
     DEFAULT_WEBHDFS_PORT
     EMPTY_STRING
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
+    FORMAT_ZULU_TIME
     HDFS_COMPARE_SKIP_FILES
     HOURS_IN_A_DAY
     INDEX_NOT_FOUND
