@@ -8,7 +8,10 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
-use App::Oozie::Constants       qw( EMPTY_STRING );
+use App::Oozie::Constants       qw(
+    EMPTY_STRING
+    RE_AT
+);
 use App::Oozie::Types::DateTime qw( IsDateStr );
 use App::Oozie::Types::States   qw( IsOozieStateRerunnable );
 use Date::Parse ();
@@ -29,10 +32,6 @@ resume, depending on the task status
 
 USAGE
 ;
-
-use constant {
-    RE_AT => qr{ \@ }xms,
-};
 
 with qw(
     App::Oozie::Role::Log

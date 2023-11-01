@@ -8,9 +8,9 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
-use constant {
-    STAT_SIZE => 7,
-};
+use App::Oozie::Constants qw(
+    STAT_SIZE
+);
 
 use File::Basename;
 use Moo;

@@ -8,7 +8,11 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
-use App::Oozie::Constants     qw( EMPTY_STRING );
+use App::Oozie::Constants qw(
+    EMPTY_STRING
+    RE_COLON
+    RE_DOT
+);
 use App::Oozie::Types::Common qw( IsFile );
 use App::Oozie::Util::Misc    qw( resolve_tmp_dir );
 
@@ -24,11 +28,6 @@ use Types::Standard qw( Str );
 use XML::Compile::Cache;
 use XML::Compile::Util;
 use XML::LibXML;
-
-use constant {
-    RE_COLON => qr{ [:] }xms,
-    RE_DOT   => qr{ [.] }xms,
-};
 
 with qw(
     App::Oozie::Role::Log

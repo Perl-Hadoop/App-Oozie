@@ -64,6 +64,8 @@ Internal module.
 
 =head2 resolve_tmp_dir
 
+=head2 trim_slashes
+
 =head1 SEE ALSO
 
 L<App::Oozie>.

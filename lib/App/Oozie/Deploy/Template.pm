@@ -8,15 +8,12 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
-use constant {
-    DEFAULT_FMODE => 755,
-    LAST_ELEM     => -1,
-};
-
 use App::Oozie::Types::Common qw( IsDir );
 use App::Oozie::Util::Misc qw( resolve_tmp_dir );
 use App::Oozie::Constants qw(
+    DEFAULT_FMODE
     EMPTY_STRING
+    LAST_ELEM
     TEMPLATE_DEFINE_VAR
 );
 

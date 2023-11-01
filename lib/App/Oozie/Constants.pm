@@ -34,6 +34,7 @@ use constant {
     DATE_PATTERN                            => '%Y-%m-%d',
     DEFAULT_CLUSTER_NAME                    => 'MyCluster',
     DEFAULT_END_DATE_DAYS                   => 180,
+    DEFAULT_FMODE                           => 755,
     DEFAULT_HDFS_WF_PATH                    => '/oozie_wfs',
     DEFAULT_META_FILENAME                   => 'meta.yml',
     DEFAULT_NAMENODE_RPC_PORT               => 8020,
@@ -43,6 +44,13 @@ use constant {
     DEFAULT_WEBHDFS_PORT                    => 14_000,
     EMPTY_STRING                            => q{},
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES => 2,
+    INDEX_NOT_FOUND                         => -1,
+    LAST_ELEM                               => -1,
+    ONE_HOUR                                => 3600,
+    RE_AT                                   => qr{ \@ }xms,
+    RE_COLON                                => qr{ [:] }xms,
+    RE_DOT                                  => qr{ [.] }xms,
+    RE_EQUAL                                => qr{ [=] }xms,
     RE_LINEAGE_DATA_ITEM                    => qr{
         \A
             hive     # Data source type
@@ -58,6 +66,7 @@ use constant {
         oozie-oozi -
     }xms,
     SPACE_CHAR      => q{ },
+    STAT_SIZE       => 7,
     VALID_JOB_TYPES => [qw(
         bundle
         coord
@@ -72,6 +81,7 @@ our @EXPORT_OK = qw(
     DATE_PATTERN
     DEFAULT_CLUSTER_NAME
     DEFAULT_END_DATE_DAYS
+    DEFAULT_FMODE
     DEFAULT_HDFS_WF_PATH
     DEFAULT_META_FILENAME
     DEFAULT_NAMENODE_RPC_PORT
@@ -82,12 +92,20 @@ our @EXPORT_OK = qw(
     EMPTY_STRING
     FILE_FIND_FOLLOW_SKIP_IGNORE_DUPLICATES
     HDFS_COMPARE_SKIP_FILES
+    INDEX_NOT_FOUND
+    LAST_ELEM
+    ONE_HOUR
     OOZIE_STATES_RERUNNABLE
     OOZIE_STATES_RUNNING
+    RE_AT
+    RE_COLON
+    RE_DOT
+    RE_EQUAL
     RE_LINEAGE_DATA_ITEM
     RE_OOZIE_ID
     SHORTCUT_METHODS
     SPACE_CHAR
+    STAT_SIZE
     TEMPLATE_DEFINE_VAR
     VALID_JOB_TYPES
     WEBHDFS_CREATE_CHUNK_SIZE

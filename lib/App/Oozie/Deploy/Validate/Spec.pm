@@ -8,11 +8,10 @@ use warnings;
 
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
-use constant {
-    INDEX_NOT_FOUND => -1,
-};
-
-use App::Oozie::Constants qw( EMPTY_STRING );
+use App::Oozie::Constants qw(
+    EMPTY_STRING
+    INDEX_NOT_FOUND
+);
 use App::Oozie::Deploy::Validate::Oozie;
 use App::Oozie::Deploy::Validate::DAG::Workflow;
 use App::Oozie::Deploy::Validate::Spec::Coordinator;
