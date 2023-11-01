@@ -529,7 +529,7 @@ sub _pre_process_ttconfig_into_tempfile {
     open my $FH, '<', $file or die "Failed to read $file: $!";
 
     while ( <$FH> ) {
-        if ( /^copy/ ) {
+        if ( $_ =~ m{ \A copy }xms ) {
             $logger->info(
                 sprintf "Files matching this pattern will be copied as-is: /%s/",
                             trim +(split m{ [=] }xms, $_, 2)[LAST_ELEM]
