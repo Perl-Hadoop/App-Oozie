@@ -70,11 +70,6 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [-Variables::ProhibitReusedNames]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 
-# /xms
-[-RegularExpressions::RequireDotMatchAnything]
-[-RegularExpressions::RequireExtendedFormatting]
-[-RegularExpressions::RequireLineBoundaryMatching]
-
 # ===================================================== #
 
 # ===================== enable =======================  #
@@ -112,6 +107,12 @@ verbose   = [%p] %m at line %l, column %c.  (Severity: %s) - %f - %r\n
 [RegularExpressions::ProhibitCaptureWithoutTest]
 [RegularExpressions::ProhibitComplexRegexes]
 [RegularExpressions::ProhibitUnusedCapture]
+
+# /xms
+[RegularExpressions::RequireDotMatchAnything]
+[RegularExpressions::RequireExtendedFormatting]
+[RegularExpressions::RequireLineBoundaryMatching]
+
 [Subroutines::ProhibitAmpersandSigils]
 [Subroutines::ProhibitBuiltinHomonyms]
 [Subroutines::ProhibitExplicitReturnUndef]
