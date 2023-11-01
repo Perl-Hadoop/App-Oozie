@@ -223,7 +223,7 @@ has email_validator => (
                 $self->logger->warn( "No email was set!" );
                 return;
             };
-            my @splits = map s/\+.+?@/@/r, map s/^\s+|\s+$//gr, split q{,}, $emails; ## no critic (ProhibitStringySplit,RequireDotMatchAnything,RequireExtendedFormatting,RequireLineBoundaryMatching)
+            my @splits = map s/\+.+?@/@/r, map s/^\s+|\s+$//gr, split q{,}, $emails; ## no critic (ProhibitStringySplit,RequireDotMatchAnything,RequireExtendedFormatting,RequireLineBoundaryMatching,ProhibitEscapedMetacharacters)
             my @invalids = grep { ! Email::Valid->address( $_ ) } @splits;
             return 1 if ! @invalids;
             for my $bogus ( @invalids ) {

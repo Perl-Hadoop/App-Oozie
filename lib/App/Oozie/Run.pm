@@ -695,7 +695,7 @@ sub check_coordinator_function_calls {
     #    ${coord:formatTime(coord:nominalTime(), 'yyyy-MM-dd')}
     #    ${coord:formatTime(coord:nominalTime(), 'HH')}
     #
-    my $looks_like_coord_conf = qr< \$\{coord\: >xms;
+    my $looks_like_coord_conf = qr< [$][{]coord[:] >xms;
     my %missing;
     my $collector = sub {
         my($h, $key) = @_;
