@@ -87,6 +87,8 @@ sub validate {
     my $self = shift;
     my $file = shift || die "No file was specified!";
 
+    state $is_end_or_kill = { map { $_ => 1 } qw( end kill ) };
+
     $self->logger->info( "DAG validation for $file" );
 
     die "File $file does not exist" if ! -e $file;
@@ -147,8 +149,10 @@ sub validate {
     }
 
     for my $e ( $g->successorless_vertices ) {
-        my $type =  is_hashref( $e ) ? $e->{data}{type} : EMPTY_STRING;
-        next if $type && $type =~ /^(end|kill)$/;
+        my $type = is_hashref( $e ) ? $e->{data}{type}
+                                    : EMPTY_STRING
+                                    ;
+        next if $type && $is_end_or_kill->{ $type };
         push @errors,
             [
                 "extra successorless vertex found: \"$e\"",
@@ -203,16 +207,30 @@ sub _descend {
 
     if ( @{ $processor->{to} } > 0 ) {
         for my $to ( grep { $_ } @{ $processor->{to} } ) {
-            if ( $to =~ /^(.+?)\.(.+?)$/ ) {
+            if ( $to =~ m{
+                            \A
+                                (.+?) [.] (.+?)
+                            \z
+                        }xms
+            ) {
                 my ( $child_tag, $child_attr ) = ( $1, $2 );
                 my @child_nodes;
-                if ($child_tag =~ /^(.+)\/(.+)$/) {
-                    @child_nodes = map { $_->getChildrenByLocalName($2) }
-                                    $node->getChildrenByLocalName($1);
+
+                if ($child_tag =~ m{
+                                        \A
+                                            (.+) [/] (.+)
+                                        \z
+                                    }xms
+                ) {
+                    @child_nodes = map {
+                                        $_->getChildrenByLocalName( $2 )
+                                    }
+                                    $node->getChildrenByLocalName( $1 );
                 }
                 else {
                     @child_nodes = $node->getChildrenByLocalName($child_tag);
                 }
+
                 push @node_to, $_->getAttribute($child_attr) for @child_nodes;
             }
             else {
