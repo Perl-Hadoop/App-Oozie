@@ -125,7 +125,7 @@ ETOOFAT
     # TODO: we already have the decoded XML. Get rid of this file read
     #
     # check any action contains root.default or root.mapred queue conf (spark,hive or shell)
-    open my $FH, '<', $file or die "Cannot open $file";
+    open my $FH, '<', $file or die "Cannot open $file"; ## no critic (InputOutput::RequireBriefOpen)
     while(my $String = <$FH>) {
         if (
                 $String =~ m{ (root.default) \z }xms

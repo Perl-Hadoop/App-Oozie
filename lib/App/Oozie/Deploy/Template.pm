@@ -124,9 +124,11 @@ sub get_job_conf {
     # doing the expansion.
     #
     my $p = Config::Properties->new();
-    my $FH;
-    open $FH, '<', $file or die "Cannot open $file";
+
+    open my $FH, '<', $file or die "Cannot open $file";
     $p->load($FH);
+    close $FH;
+
     my %c = $p->properties;
     for my $key ( keys %c ) {
         my $val = $c{ $key };
@@ -523,18 +525,24 @@ sub _pre_process_ttconfig_into_tempfile {
                                     );
 
     my $file = File::Spec->catfile( $self->ttlib_base_dir, 'ttree.cfg' );
-    open my $FH, '<', $file or die "Failed to read $file: $!";
 
-    while ( <$FH> ) {
-        if ( $_ =~ m{ \A copy }xms ) {
+    my $maybe_log_line = sub {
+        my $config_line = shift || return;
+        if ( $config_line =~ m{ \A copy }xms ) {
             $logger->info(
                 sprintf "Files matching this pattern will be copied as-is: /%s/",
-                            trim +(split m{ [=] }xms, $_, 2)[LAST_ELEM]
+                            trim +(split m{ [=] }xms, $config_line, 2)[LAST_ELEM]
             );
         }
+        return;
+    };
 
+    open my $FH, '<', $file or die "Failed to read $file: $!";
+    while ( <$FH> ) {
+        $maybe_log_line->( $_ );
         print $fh_tmp_cfg $_;
     }
+    close $FH;
 
     # Attach the correct lib dir to the conf
     printf $fh_tmp_cfg "\nlib = %s\n", $self->ttlib_base_dir;

@@ -1026,20 +1026,24 @@ sub write_deployment_meta_file {
 
     my $file = File::Spec->catfile( $path, $self->deployment_meta_file_name );
 
-    open my $FH, '>', $file or die "Could not create $file: $!";
+    my $compute_meta_row = sub {
+        my $this_row         = shift;
+        my($display, $value) = @{ $this_row }{qw/ display value /};
+        my $multi_line       = $value =~ m{\n}xms;
 
-    for my $row ( @{ $meta } ) {
-        my($display, $value) = @{ $row }{qw/ display value /};
-        my $multi_line = $value =~ m{\n}xms;
-        printf $FH "%s% -${max_len}s:%s%s%s",
+        return sprintf "%s% -${max_len}s:%s%s%s",
                     ( $multi_line ? "\n" : EMPTY_STRING ),
                     $display,
                     ( $multi_line ? "\n\n" : SPACE_CHAR ),
                     $value,
                     ( $multi_line ? "\n\n" : "\n" ),
         ;
-    }
+    };
 
+    open my $FH, '>', $file or die "Could not create $file: $!";
+    for my $row ( @{ $meta } ) {
+        printf $FH $compute_meta_row->( $row );
+    }
     close $FH;
 
     return;

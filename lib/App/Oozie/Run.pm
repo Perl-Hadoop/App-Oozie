@@ -438,6 +438,7 @@ sub collect_oozie_cmd_args {
     if ( open my $ORIG_FH, '<', 'job.properties' ) {
         local $/;
         $original = <$ORIG_FH>;
+        close $ORIG_FH;
     }
 
     $override_file->print( $original, "\n\n" );
@@ -810,6 +811,7 @@ sub collect_properties {
     my $properties = Config::Properties->new;
     open my $FH, '<', 'job.properties' or die 'Cannot open job.properties';
     $properties->load($FH);
+    close $FH;
 
     if ( my $uname = $properties->getProperty('user.name') ) {
         $self->logger->info( "Collected user.name override = $uname" );
