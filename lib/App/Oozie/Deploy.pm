@@ -303,6 +303,7 @@ sub run {
     my $logger    = $self->logger;
     my $config    = $self->internal_conf;
     my $dryrun    = $self->dryrun;
+    my $verbose   = $self->verbose;
 
     my $run_start_epoch = time;
     my $log_marker = q{#} x TERMINAL_INFO_LINE_LEN;
@@ -311,9 +312,18 @@ sub run {
         sprintf '%s Starting deployment in %s%s %s',
                     $log_marker,
                     $self->cluster_name,
-                    $self->verbose ? EMPTY_STRING : '. Enable --verbose to see the underlying commands',
+                    $verbose ? EMPTY_STRING : '. Enable --verbose to see the underlying commands',
                     $log_marker,
     );
+
+
+    if ( $verbose ) {
+        $logger->debug(
+            sprintf 'Running under %s v%s',
+                    ref $self,
+                    $self->VERSION,
+        );
+    }
 
     my($update_coord) = $self->_verify_and_compile_all_workflows( $workflows );
 
