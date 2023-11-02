@@ -2,6 +2,9 @@ Revision history for App-Oozie
 
 {{$NEXT}}
 
+0.015     2023-11-02 14:09:50+01:00 Europe/Brussels
+- Revert back to PodWeaver in build tooling.
+
 0.014     2023-11-02 13:45:55+01:00 Europe/Brussels
 - perlcritic policy + test.
 - Build tooling.
