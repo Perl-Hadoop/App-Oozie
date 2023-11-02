@@ -316,13 +316,22 @@ sub run {
                     $log_marker,
     );
 
-
     if ( $verbose ) {
-        $logger->debug(
-            sprintf 'Running under %s v%s',
-                    ref $self,
-                    $self->VERSION,
-        );
+        my $me      = ref $self;
+        my @classes = ( [ $me, $self->VERSION ] );
+
+        if ( $me ne __PACKAGE__ ) {
+            push @classes, [ __PACKAGE__, __PACKAGE__->VERSION ];
+        }
+
+        for my $tuple ( @classes ) {
+            my($name, $v) = @{ $tuple };
+            my $msg = defined $v
+                    ? sprintf 'Running under %s %s', $name, $v
+                    : sprintf 'Running under %s', $name
+                    ;
+            $logger->debug( $msg );
+        }
     }
 
     my($update_coord) = $self->_verify_and_compile_all_workflows( $workflows );
