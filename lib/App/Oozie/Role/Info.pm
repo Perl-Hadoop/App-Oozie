@@ -39,3 +39,36 @@ sub log_versions {
 1;
 
 __END__
+
+=pod
+
+=encoding utf8
+
+=head1 NAME
+
+App::Oozie::Role::Info - Helper to gather information about the tooling.
+
+=head1 SYNOPSIS
+
+    use Moo;
+    with qw(
+        App::Oozie::Role::Info
+    );
+    sub method {
+        my $self = shift;
+        $self->log_versions if $self->verbose;
+    }
+
+=head1 DESCRIPTION
+
+Helper to gather information about the tooling.
+
+=head1 Methods
+
+=head2 log_versions
+
+=head1 SEE ALSO
+
+L<App::Oozie>.
+
+=cut
