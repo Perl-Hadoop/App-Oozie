@@ -9,6 +9,7 @@ use warnings;
 use namespace::autoclean -except => [qw/_options_data _options_config/];
 
 use Moo::Role;
+use Ref::Util qw( is_arrayref );
 
 with qw(
     App::Oozie::Role::Log
@@ -20,8 +21,18 @@ sub log_versions {
     my $me        = ref $self;
     my @classes   = ( [ $me, $self->VERSION ] );
 
-    if ( $me ne __PACKAGE__ ) {
-        push @classes, [ __PACKAGE__, __PACKAGE__->VERSION ];
+    my $base_class = do {
+        no strict qw(refs);
+        my @isa =   grep { $_ ne $me }
+                    map  {
+                        is_arrayref $_ ? @{ $_ } : $_
+                    }
+                    @{ $me . '::ISA' };
+        @isa ? $isa[0] : ();
+    };
+
+    if ( $base_class ) {
+        push @classes, [ $base_class, $base_class->VERSION ];
     }
 
     for my $tuple ( @classes ) {
