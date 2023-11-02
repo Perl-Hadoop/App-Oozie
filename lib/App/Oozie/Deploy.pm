@@ -74,6 +74,7 @@ with qw(
     App::Oozie::Role::NameNode
     App::Oozie::Role::Git
     App::Oozie::Role::Meta
+    App::Oozie::Role::Info
 );
 
 option write_ownership_to_workflow_xml => (
@@ -316,23 +317,7 @@ sub run {
                     $log_marker,
     );
 
-    if ( $verbose ) {
-        my $me      = ref $self;
-        my @classes = ( [ $me, $self->VERSION ] );
-
-        if ( $me ne __PACKAGE__ ) {
-            push @classes, [ __PACKAGE__, __PACKAGE__->VERSION ];
-        }
-
-        for my $tuple ( @classes ) {
-            my($name, $v) = @{ $tuple };
-            my $msg = defined $v
-                    ? sprintf 'Running under %s %s', $name, $v
-                    : sprintf 'Running under %s', $name
-                    ;
-            $logger->debug( $msg );
-        }
-    }
+    $self->log_versions if $verbose;
 
     my($update_coord) = $self->_verify_and_compile_all_workflows( $workflows );
 
