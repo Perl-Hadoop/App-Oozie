@@ -84,6 +84,7 @@ use constant {
         wf
     )],
     TEMPLATE_DEFINE_VAR       => q{%s='%s'},
+    TERMINAL_INFO_LINE_LEN    => 10,
     TERMINAL_LINE_LEN         => 80,
     WEBHDFS_CREATE_CHUNK_SIZE => 1024**1024 * 2,
     XML_LOCALNAME_POS         => -2,
@@ -135,6 +136,7 @@ our @EXPORT_OK = qw(
     STAT_MODE
     STAT_SIZE
     TEMPLATE_DEFINE_VAR
+    TERMINAL_INFO_LINE_LEN
     TERMINAL_LINE_LEN
     VALID_JOB_TYPES
     WEBHDFS_CREATE_CHUNK_SIZE

@@ -17,7 +17,7 @@ use App::Oozie::Constants qw(
     MODE_BITSHIFT_READ
     SPACE_CHAR
     STAT_MODE
-    TERMINAL_LINE_LEN
+    TERMINAL_INFO_LINE_LEN
     WEBHDFS_CREATE_CHUNK_SIZE
 );
 use Cwd 'abs_path';
@@ -305,7 +305,7 @@ sub run {
     my $dryrun    = $self->dryrun;
 
     my $run_start_epoch = time;
-    my $log_marker = q{#} x TERMINAL_LINE_LEN;
+    my $log_marker = q{#} x TERMINAL_INFO_LINE_LEN;
 
     $logger->info(
         sprintf '%s Starting deployment in %s%s %s',
