@@ -55,6 +55,7 @@ with qw(
     App::Oozie::Role::Fields::Common
     App::Oozie::Role::Fields::Path
     App::Oozie::Role::Meta
+    App::Oozie::Role::Info
 );
 
 #------------------------------------------------------------------------------#
@@ -322,6 +323,8 @@ sub run {
     my $verbose = $self->verbose;
 
     $logger->info( 'Starting' . ( $verbose ? EMPTY_STRING : '. Enable --verbose to see the underlying commands' ) );
+
+    $self->log_versions if $self->verbose;
 
     $self->basedir( $wf_dir );
 

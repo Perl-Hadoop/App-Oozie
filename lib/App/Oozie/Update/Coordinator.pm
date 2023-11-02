@@ -39,6 +39,7 @@ USAGE
 with qw(
     App::Oozie::Role::Log
     App::Oozie::Role::Fields::Common
+    App::Oozie::Role::Info
 );
 
 option coord => (
@@ -80,6 +81,8 @@ sub run {
                 $self->verbose  ? EMPTY_STRING
                                 : '. Enable --verbose to see more information',
     );
+
+    $self->log_versions if $self->verbose;
 
     my($job_meta, $job_properties) = $self->collect_current_conf;
 

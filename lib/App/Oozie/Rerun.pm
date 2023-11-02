@@ -39,6 +39,7 @@ USAGE
 with qw(
     App::Oozie::Role::Log
     App::Oozie::Role::Fields::Common
+    App::Oozie::Role::Info
 );
 
 option name => (
@@ -108,10 +109,12 @@ sub BUILD {
 }
 
 sub run {
-    my $self   = shift;
-    my $logger = $self->logger;
+    my $self = shift;
+
+    $self->log_versions if $self->verbose;
+
     my $reruns = $self->collect || do {
-        $logger->info( 'No failed jobs matching your conditions' );
+        $self->logger->info( 'No failed jobs matching your conditions' );
         return;
     };
 
