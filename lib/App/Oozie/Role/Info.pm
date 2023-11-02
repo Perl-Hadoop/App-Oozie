@@ -30,7 +30,7 @@ sub log_versions {
                 ? sprintf 'Running under %s %s', $name, $v
                 : sprintf 'Running under %s', $name
                 ;
-        $logger->$log_level( $msg );
+        $self->logger->$log_level( $msg );
     }
 
     return;
