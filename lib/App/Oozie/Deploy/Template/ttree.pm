@@ -2,7 +2,7 @@ package App::Oozie::Deploy::Template::ttree;
 
 use strict;
 use warnings;
-use parent qw( App::Oozie::Forked::Template::ttree );
+use parent qw( Template::App::ttree );
 
 # VERSION
 
